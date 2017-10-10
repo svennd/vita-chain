@@ -21,7 +21,6 @@ local red 		= Color.new(255, 0, 0)
 local green 	= Color.new(0, 255, 0)
 local blue 		= Color.new(0, 0, 255)
 
-local pink 		= Color.new(255, 204, 204)
 local orange	= Color.new(255, 128, 0)
 local seablue	= Color.new(0, 255, 255)
 local purple	= Color.new(255, 0, 255)
@@ -35,22 +34,19 @@ atoms = {}
 -- atom states
 STATE = {INIT = 1, EXPANDING = 2, EXPLODE = 3, MERGED = 4}
 ATOM = {
-			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 5}, 
-			{NAME = "HELIUM", SIZE = 10, COLOR = red, EXPAND = 4},  
-			{NAME = "LITHIUM", SIZE = 13, COLOR = green, EXPAND = 3}, 
-			{NAME = "BERYLLIUM", SIZE = 16, COLOR = blue, EXPAND = 2},  
-			{NAME = "BORON", SIZE = 19, COLOR = purple, EXPAND = 2},  
-			{NAME = "CARBON", SIZE = 21, COLOR = orange, EXPAND = 2},  
-			{NAME = "NITROGEN", SIZE = 24, COLOR = seablue, EXPAND = 2}
-			-- {NAME = "OXIGEN", SIZE = 8, COLOR = pink}, 
-			-- {NAME = "FLUOR", SIZE = 9, COLOR = grey_1}, 
-			-- {NAME = "NEON", SIZE = 10, COLOR = white}, 
+			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 3, SCORE = 10}, 
+			{NAME = "HELIUM", SIZE = 7, COLOR = red, EXPAND = 2, SCORE = 15},  
+			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 1.7, SCORE = 25}, 
+			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 1.5, SCORE = 35},  
+			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.15, SCORE = 50},  
+			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, SCORE = 70},  
+			{NAME = "NITROGEN", SIZE = 7, COLOR = seablue, EXPAND = 1.01, SCORE = 100}
 		}
 game = {fps = 60, start = Timer.new(), last_tick = 0, step = 10}
-user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false}
-MAX_EXPAND = 5
-TICK_LIFE = 100 -- life of explosion
-animation = { exploding = 100 }
+user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
+MAX_EXPAND = 3
+animation = { implode_start = 100, user_implode = 500 }
+score = 0
 
 function populate_atoms(n)	
 	-- seed for selected_atom
@@ -72,10 +68,12 @@ function populate_atoms(n)
 							color = ATOM[selected_atom].COLOR, 
 							x = math.random(30, FIELD.WIDTH-30), 
 							y = math.random(30, FIELD.HEIGHT-30),
-							dx = math.random() * random_direction(),
-							dy = math.random() * random_direction(),
+							dx = FIELD.WIDTH / math.random(5, 15) * random_direction(),
+							dy = FIELD.HEIGHT / math.random(5, 15) * random_direction(),
 							state = STATE.INIT,
-							expand = 1
+							expand = 1,
+							implode = 0,
+							score = ATOM[selected_atom].SCORE
 						}
 		atom_id = atom_id + 1 
 	end
@@ -91,7 +89,6 @@ function random_direction()
 	return result
 end
 
-
 function draw()
 
 	-- Starting drawing phase
@@ -100,7 +97,9 @@ function draw()
 	-- background
 	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, grey_3)
 	
-	Graphics.debugPrint(500, 10, game.fps, Color.new(255, 255, 255))
+	Graphics.debugPrint(500, 30, game.fps, red)
+	Graphics.debugPrint(500, 90, score, red)
+	
 	-- local i = 0
 	-- local count_atoms = #atoms
 	-- while i < count_atoms do
@@ -135,7 +134,15 @@ function draw_atoms()
 	local i = 0
 	local count_atoms = #atoms
 	while i < count_atoms do
-		Graphics.fillCircle(atoms[i].x, atoms[i].y, atoms[i].neutrons * atoms[i].expand, atoms[i].color)
+		if atoms[i].state ~= STATE.MERGED
+		then
+			-- apply a channel to color if expanding
+			if atoms[i].expand > 1 then
+				Graphics.fillCircle(atoms[i].x, atoms[i].y, atoms[i].neutrons * atoms[i].expand, Color.new(Color.getR(atoms[i].color), Color.getG(atoms[i].color),Color.getB(atoms[i].color), 150))
+			else
+				Graphics.fillCircle(atoms[i].x, atoms[i].y, atoms[i].neutrons * atoms[i].expand, atoms[i].color)
+			end
+		end 
 		i = i + 1
 	end
 end
@@ -169,21 +176,26 @@ end
 
 function update(delta)
 	-- determ new position of atoms
-	local current = Timer.getTime(game.start)
-	local elapsed = current - game.last_tick
+	-- local current = Timer.getTime(game.start)
+	-- local elapsed = current - game.last_tick
 	
-	--if elapsed > game.step then
-		move_atoms(delta)
-		expand_user(delta)
-		expand_atoms(delta)
-	--end
-
+	-- chaos
+	move_atoms(delta)
+	
 	-- determ collisions
 	collision_detect()
-
 	
+	-- expand collisions
+	expand_user(delta)
+	expand_atoms(delta)
+	
+	-- remove items
+	implode_atoms(delta)
+	implode_user(delta)	
+	
+
 	-- update tick
-	game.last_tick = current
+	-- game.last_tick = current
 end
 
 -- collision detection
@@ -199,7 +211,7 @@ function collision_detect()
 			-- only for floaters
 			if atoms[i].state == STATE.INIT then
 				-- distance should be smaller then user_size*expand + atom.neutrons (atom cannot have expansion but maybe later)
-				if distance(user.x, user.y, atoms[i].x, atoms[i].y) <= (user.size*(user.expand) + atoms[i].neutrons* (atoms[i].expand+1)) then
+				if distance(user.x, user.y, atoms[i].x, atoms[i].y) <= (user.size*(user.expand) + atoms[i].neutrons) then
 					-- expand and stop motion
 					atoms[i].state = STATE.EXPANDING
 					atoms[i].dx = 0
@@ -216,17 +228,17 @@ function collision_detect()
 	
 	while i < count_atoms do
 		-- for expanding or exploding
-		if atoms[i].state == STATE.EXPANDING or atoms[i].state == STATE.EXPLODING then
+		if atoms[i].state == STATE.EXPANDING or atoms[i].state == STATE.EXPLODE then
 			local x_collision = atoms[i].x
 			local y_collision = atoms[i].y
-			local static_size = atoms[i].neutrons*(atoms[i].expand+1)
+			local static_size = atoms[i].neutrons*atoms[i].expand
 			
 			-- collision detect all others
 			local o = 0
 			while o < count_atoms do
 				-- only collide with floaters
 				if atoms[o].state == STATE.INIT then
-					if distance(x_collision, y_collision, atoms[o].x, atoms[o].y) <= (static_size + atoms[o].neutrons*(atoms[o].expand+1)) then
+					if distance(x_collision, y_collision, atoms[o].x, atoms[o].y) <= (static_size + atoms[o].neutrons) then
 						-- expand and stop motion
 						atoms[o].state = STATE.EXPANDING
 						atoms[o].dx = 0
@@ -243,26 +255,30 @@ end
 
 -- expand user
 -- need to take dt in this increase
-function expand_user(elapsed)
-	-- expand when needed
-	if user.expand < MAX_EXPAND then
-		user.expand = user.expand + elapsed
-	else
-		user.state = STATE.EXPLODE
+function expand_user(delta)
+	if user.state == STATE.INIT or user.state == STATE.EXPANDING then
+		if user.activated then
+			-- expand when needed
+			if user.expand < MAX_EXPAND then
+				user.expand = user.expand + (delta*5)
+			else
+				user.state = STATE.EXPLODE
+			end
+		end
 	end
 end
 
 -- expand all activated atoms
 -- need to take dt in this increase
-function expand_atoms(elapsed)
+function expand_atoms(delta)
 	local i = 0
 	local count_atoms = #atoms
 	
 	while i < count_atoms do
-		-- only for floaters
+		-- only for expanding
 		if atoms[i].state == STATE.EXPANDING then
 			if atoms[i].expand < MAX_EXPAND then
-				atoms[i].expand = atoms[i].expand + elapsed
+				atoms[i].expand = atoms[i].expand + (delta*3)
 			else
 				atoms[i].state = STATE.EXPLODE
 			end
@@ -271,8 +287,49 @@ function expand_atoms(elapsed)
 	end
 end
 
+-- implode atoms if needed
+function implode_atoms(delta)
+	local i = 0
+	local count_atoms = #atoms
+	
+	while i < count_atoms do
+		-- only for EXPLODED
+		if atoms[i].state == STATE.EXPLODE then
+			if atoms[i].implode > animation.implode_start then
+				if atoms[i].expand > 1 then
+					atoms[i].expand = atoms[i].expand - (delta*5)
+				else
+					--remove from field
+					atoms[i].state = STATE.MERGED
+					score = score + atoms[i].score
+				end
+			else
+				atoms[i].implode = atoms[i].implode + 1
+			end
+		end
+		i = i + 1
+	end
+end
+
+-- implode atoms if needed
+function implode_user(delta)	
+	if user.state == STATE.EXPLODE then
+		-- give ticks
+		if user.implode > animation.user_implode then
+			if user.expand > 1 then
+				user.expand = user.expand - (delta*5)
+			else
+				--remove from field
+				user.state = STATE.MERGED
+			end
+		else
+			user.implode = user.implode + 1
+		end
+	end
+end
+
 -- move the atoms around
-function move_atoms(elapsed)
+function move_atoms(delta)
 	local i = 0
 	local count_atoms = #atoms
 	while i < count_atoms do
@@ -286,8 +343,8 @@ function move_atoms(elapsed)
 			local dir_y = atoms[i].dy
 			
 			-- determ new location
-			local new_x = current_x + dir_x*elapsed --this should take into account the time passed
-			local new_y = current_y + dir_y*elapsed --this should take into account the time passed
+			local new_x = current_x + dir_x*delta --this should take into account the time passed
+			local new_y = current_y + dir_y*delta --this should take into account the time passed
 			
 			-- check if the atom does not hit the boundry
 			-- if it does switch direction
@@ -321,12 +378,6 @@ function distance(x1,y1,x2,y2)
 	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
 end
 
--- in case speed becomes an issue
-function distanceSquared( x1, y1, x2, y2 )
-	return (x2-x1)^2 + (y2-y1)^2
-end
-
-
 -- read user_input
 function user_input()
 	local pad = Controls.read()
@@ -352,7 +403,7 @@ end
 
 -- main function
 function main()
-		
+	
 	-- initiate game variables
 	game_start()
 	
@@ -369,43 +420,42 @@ function main()
 		
 		-- determ fps as exponential moving avg fps
 		if now > fps_update + 1000 then
-			game.fps = 0.25 * fps_second + (1-0.25) * game.fps -- calculate fps
+			game.fps = math.floor(0.25 * fps_second + (1-0.25) * game.fps) -- calculate fps
 			fps_update = now
 			fps_second = 0
 		end
 		
 		-- throttle frame rate
-		if now > last_frame + timestep then
+		--if now > last_frame + timestep then
 			
-			delta = delta + (now - last_frame)
-			last_frame = now			
+		delta = delta + (now - last_frame)
+		last_frame = now			
+		
+		-- update game procs
+		local update_step = 0
+		while delta >= timestep do
+			user_input()
 			
-			-- update game procs
-			local update_step = 0
-			while delta >= timestep do
-				user_input()
-				
-				-- do update(delta)
-				-- movement : pos = velocity * delta
-				update(delta)
-				delta = delta - timestep
-				
-				-- escape spiral of death, should not occur
-				update_step = update_step + 1
-				if update_step > 250 then
-					-- cannot update fast enough
-					-- perhaps store this as an error
-					delta = 0
-					break
-				end
+			-- do update(delta)
+			-- movement : pos = velocity * delta
+			update(delta/1000)
+			delta = delta - timestep
+			
+			-- escape spiral of death, should not occur
+			update_step = update_step + 1
+			if update_step > 250 then
+				-- cannot update fast enough
+				-- perhaps store this as an error
+				delta = 0
+				break
 			end
-			
-			-- draw game
-			draw()
-			fps_second = fps_second + 1
-			-- wait for black start
-			--Screen.waitVblankStart()
 		end
+		
+		-- draw game
+		draw()
+		fps_second = fps_second + 1
+			
+		--end
 	end
 	
 end
