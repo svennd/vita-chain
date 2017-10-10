@@ -1,28 +1,16 @@
--- tetrinomi for vita, by svennd
--- version 0.6.1
+-- chain for vita, by svennd
+-- version 0.1
 
 -- vita constants
 DISPLAY_WIDTH = 960
 DISPLAY_HEIGHT = 544
 
 -- application variables
-VERSION = "0.6.1"
-
--- screen bg
--- background = Graphics.loadImage("app0:/assets/background.png")
-
--- font
--- main_font = Font.load("app0:/assets/xolonium.ttf")
-
--- sound
--- this seems to be required outside to load the pieces
--- Sound.init()
-
--- load sound
--- snd_background = Sound.open("app0:/assets/bg.ogg")
+VERSION = "0.1"
 
 -- game constants
 BUTTON = { CROSS = 1, CIRCLE = 2, TRIANGLE = 3, SQUARE = 4, LTRIGGER = 5, RTRIGGER = 6, LEFT = 7, RIGHT = 8, UP = 9, DOWN = 10, ANALOG = 11, START = 12, SELECT = 13 }
+FIELD = {WIDTH = 900, HEIGHT = 530}
 
 -- color definitions
 local white 	= Color.new(255, 255, 255)
@@ -44,55 +32,380 @@ local grey_3	= Color.new(96, 96, 96)
 
 -- vars
 atoms = {} 
-ATOM = {HYDROGEN = 1, HELIUM = 2, LITHIUM = 3, BERYLLIUM = 4, BORON = 5, CARBON = 6, NITROGEN = 7, OXIGEN = 8, FLUOR = 9, NEON = 10}
-FIELD = {WIDTH = 250, HEIGHT = 250}
+-- atom states
+STATE = {INIT = 1, EXPANDING = 2, EXPLODE = 3, MERGED = 4}
+ATOM = {
+			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 5}, 
+			{NAME = "HELIUM", SIZE = 10, COLOR = red, EXPAND = 4},  
+			{NAME = "LITHIUM", SIZE = 13, COLOR = green, EXPAND = 3}, 
+			{NAME = "BERYLLIUM", SIZE = 16, COLOR = blue, EXPAND = 2},  
+			{NAME = "BORON", SIZE = 19, COLOR = purple, EXPAND = 2},  
+			{NAME = "CARBON", SIZE = 21, COLOR = orange, EXPAND = 2},  
+			{NAME = "NITROGEN", SIZE = 24, COLOR = seablue, EXPAND = 2}
+			-- {NAME = "OXIGEN", SIZE = 8, COLOR = pink}, 
+			-- {NAME = "FLUOR", SIZE = 9, COLOR = grey_1}, 
+			-- {NAME = "NEON", SIZE = 10, COLOR = white}, 
+		}
+game = {fps = 60, start = Timer.new(), last_tick = 0, step = 10}
+user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false}
+MAX_EXPAND = 5
+TICK_LIFE = 100 -- life of explosion
+animation = { exploding = 100 }
 
-function populate_atoms(n)
-	-- seed random
-	math.randomseed(os.time())	
+function populate_atoms(n)	
+	-- seed for selected_atom
+	math.randomseed(os.clock()*1000)	
+	
+	-- prune pre-seed
+	math.random(); math.random(); math.random();
 	
 	-- for n atoms
-	local atom_id = 1
-	for local i = 0, n do
-		atom = math.random(ATOM.HYDROGEN, ATOM.LITHIUM)
-		atoms[atom_id] = {neutrons = atom, color = red, x = math.random(0, FIELD.WIDTH), y = math.random(0, FIELD.HEIGHT)}
+	local atom_id = 0
+	while atom_id < (n+1) do
+	
+		local selected_atom = math.random(1, #ATOM) -- should be #ATOM
+		
+		-- dx, dy = 1-3% of the field per step
+		atoms[atom_id] = {
+							name = ATOM[selected_atom].NAME, 
+							neutrons = ATOM[selected_atom].SIZE, 
+							color = ATOM[selected_atom].COLOR, 
+							x = math.random(30, FIELD.WIDTH-30), 
+							y = math.random(30, FIELD.HEIGHT-30),
+							dx = math.random() * random_direction(),
+							dy = math.random() * random_direction(),
+							state = STATE.INIT,
+							expand = 1
+						}
 		atom_id = atom_id + 1 
 	end
 end
 
-function draw()
-	-- draw atoms
-	-- draw field
+-- we need a 1 or a -1
+function random_direction()
+
+	local result = math.random(0,1)
+	if result == 0 then
+		result = -1
+	end
+	return result
 end
 
-function update()
-	-- do user_input
+
+function draw()
+
+	-- Starting drawing phase
+	Graphics.initBlend()
+	
+	-- background
+	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, grey_3)
+	
+	Graphics.debugPrint(500, 10, game.fps, Color.new(255, 255, 255))
+	-- local i = 0
+	-- local count_atoms = #atoms
+	-- while i < count_atoms do
+		-- Graphics.debugPrint(10,200+(i*20), atoms[i].x .. "  " .. atoms[i].y, Color.new(255, 255, 255))
+		-- Graphics.debugPrint(10,200+(i*20), atoms[i].name, Color.new(255, 255, 255))
+		-- i = i + 1
+	-- end
+
+	-- draw field
+	draw_field()
+	
+	-- draw user activation
+	draw_user()
+	
+	-- draw atoms
+	draw_atoms()
+	
+	-- Terminating drawing phase
+	Graphics.termBlend()
+	Screen.flip()
+end
+
+-- draw user
+function draw_user()
+	if user.activated and user.state ~= STATE.MERGED then
+		Graphics.fillCircle(user.x, user.y, user.size*user.expand, white)
+	end
+end
+
+-- draw atoms
+function draw_atoms()
+	local i = 0
+	local count_atoms = #atoms
+	while i < count_atoms do
+		Graphics.fillCircle(atoms[i].x, atoms[i].y, atoms[i].neutrons * atoms[i].expand, atoms[i].color)
+		i = i + 1
+	end
+end
+
+debug_file = System.openFile("ux0:/data/chain_debug", FWRITE)
+function debug_log(msg)
+	System.writeFile(debug_file, msg, string.len(msg))
+end
+ 
+function draw_field()
+	draw_box(10, FIELD.WIDTH, 10, FIELD.HEIGHT, 10, white)
+end
+
+-- draw a box
+-- untill fillEmptyRect is fixed
+function draw_box(x1, x2, y1, y2, width, color)
+
+	-- top line
+	Graphics.fillRect(x1, x2+width, y1, y1+width, color)
+	
+	-- bot line
+	Graphics.fillRect(x1, x2+width, y2, y2+width, color)
+	
+	-- left line
+	Graphics.fillRect(x1, x1+width, y1, y2, color)
+	
+	-- right line
+	Graphics.fillRect(x2, x2+width, y1, y2, color)
+	
+end
+
+function update(delta)
+	-- determ new position of atoms
+	local current = Timer.getTime(game.start)
+	local elapsed = current - game.last_tick
+	
+	--if elapsed > game.step then
+		move_atoms(delta)
+		expand_user(delta)
+		expand_atoms(delta)
+	--end
+
+	-- determ collisions
+	collision_detect()
+
+	
+	-- update tick
+	game.last_tick = current
+end
+
+-- collision detection
+function collision_detect()
+
+	-- first check user
+	if user.activated and user.state ~= STATE.MERGED then
+		-- user is still active
+		local i = 0
+		local count_atoms = #atoms
+		
+		while i < count_atoms do
+			-- only for floaters
+			if atoms[i].state == STATE.INIT then
+				-- distance should be smaller then user_size*expand + atom.neutrons (atom cannot have expansion but maybe later)
+				if distance(user.x, user.y, atoms[i].x, atoms[i].y) <= (user.size*(user.expand) + atoms[i].neutrons* (atoms[i].expand+1)) then
+					-- expand and stop motion
+					atoms[i].state = STATE.EXPANDING
+					atoms[i].dx = 0
+					atoms[i].dy = 0
+				end
+			end
+			i = i + 1
+		end
+	end
+	
+	-- now do all the other atoms this is heavy
+	local i = 0
+	local count_atoms = #atoms
+	
+	while i < count_atoms do
+		-- for expanding or exploding
+		if atoms[i].state == STATE.EXPANDING or atoms[i].state == STATE.EXPLODING then
+			local x_collision = atoms[i].x
+			local y_collision = atoms[i].y
+			local static_size = atoms[i].neutrons*(atoms[i].expand+1)
+			
+			-- collision detect all others
+			local o = 0
+			while o < count_atoms do
+				-- only collide with floaters
+				if atoms[o].state == STATE.INIT then
+					if distance(x_collision, y_collision, atoms[o].x, atoms[o].y) <= (static_size + atoms[o].neutrons*(atoms[o].expand+1)) then
+						-- expand and stop motion
+						atoms[o].state = STATE.EXPANDING
+						atoms[o].dx = 0
+						atoms[o].dy = 0		
+					end
+				end
+				o = o + 1
+			end
+		end
+		i = i + 1
+	end
+	
+end
+
+-- expand user
+-- need to take dt in this increase
+function expand_user(elapsed)
+	-- expand when needed
+	if user.expand < MAX_EXPAND then
+		user.expand = user.expand + elapsed
+	else
+		user.state = STATE.EXPLODE
+	end
+end
+
+-- expand all activated atoms
+-- need to take dt in this increase
+function expand_atoms(elapsed)
+	local i = 0
+	local count_atoms = #atoms
+	
+	while i < count_atoms do
+		-- only for floaters
+		if atoms[i].state == STATE.EXPANDING then
+			if atoms[i].expand < MAX_EXPAND then
+				atoms[i].expand = atoms[i].expand + elapsed
+			else
+				atoms[i].state = STATE.EXPLODE
+			end
+		end
+		i = i + 1
+	end
+end
+
+-- move the atoms around
+function move_atoms(elapsed)
+	local i = 0
+	local count_atoms = #atoms
+	while i < count_atoms do
+	
+		-- only move when no reaction has happened
+		if atoms[i].state == STATE.INIT then
+			-- current location
+			local current_x = atoms[i].x
+			local current_y = atoms[i].y
+			local dir_x = atoms[i].dx
+			local dir_y = atoms[i].dy
+			
+			-- determ new location
+			local new_x = current_x + dir_x*elapsed --this should take into account the time passed
+			local new_y = current_y + dir_y*elapsed --this should take into account the time passed
+			
+			-- check if the atom does not hit the boundry
+			-- if it does switch direction
+			-- 20 = field border + field offset
+			if new_x-atoms[i].neutrons < 20 or new_x+atoms[i].neutrons > FIELD.WIDTH then
+				dir_x = -dir_x
+			end
+			
+			if new_y-atoms[i].neutrons < 20 or new_y+atoms[i].neutrons > FIELD.HEIGHT then
+				dir_y = -dir_y
+			end
+			
+			atoms[i].x = new_x
+			atoms[i].y = new_y
+			atoms[i].dx = dir_x
+			atoms[i].dy = dir_y
+		end
+		i = i + 1
+	end
 end
 
 function game_start()
-	populate_atoms(10)
+	populate_atoms(30)
+	
+	game.last_tick = 0 -- drop ticks
+	Timer.reset(game.start) -- restart game timer
+end
+
+-- determ distance between two points
+function distance(x1,y1,x2,y2)
+	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
+end
+
+-- in case speed becomes an issue
+function distanceSquared( x1, y1, x2, y2 )
+	return (x2-x1)^2 + (y2-y1)^2
+end
+
+
+-- read user_input
+function user_input()
+	local pad = Controls.read()
+	
+	if not user.activated then
+
+		local x, y = Controls.readTouch()
+
+		-- first input only
+		if x ~= nil then
+			user.x = x
+			user.y = y
+			user.state = STATE.EXPANDING
+			user.activated = true
+		end
+	end
+	
+	-- exit
+	if Controls.check(pad, SCE_CTRL_SELECT) then
+		clean_exit()
+	end
 end
 
 -- main function
 function main()
-
-	-- start sound
-	-- Sound.play(snd_background, LOOP)
 		
 	-- initiate game variables
 	game_start()
 	
-	-- gameloop
-	while true do
+	local timestep = 1000/60 -- 60 fps target
+	local delta = 0
+	local start = Timer.new()
+	local last_frame = 0
+	local fps_second = 0
+	local fps_update = 0
 	
-		-- update game procs
-		update()
+	-- loop
+	while true do
+		now = Timer.getTime(start)
 		
-		-- draw game
-		draw_frame()
+		-- determ fps as exponential moving avg fps
+		if now > fps_update + 1000 then
+			game.fps = 0.25 * fps_second + (1-0.25) * game.fps -- calculate fps
+			fps_update = now
+			fps_second = 0
+		end
 		
-		-- wait for black start
-		Screen.waitVblankStart()
+		-- throttle frame rate
+		if now > last_frame + timestep then
+			
+			delta = delta + (now - last_frame)
+			last_frame = now			
+			
+			-- update game procs
+			local update_step = 0
+			while delta >= timestep do
+				user_input()
+				
+				-- do update(delta)
+				-- movement : pos = velocity * delta
+				update(delta)
+				delta = delta - timestep
+				
+				-- escape spiral of death, should not occur
+				update_step = update_step + 1
+				if update_step > 250 then
+					-- cannot update fast enough
+					-- perhaps store this as an error
+					delta = 0
+					break
+				end
+			end
+			
+			-- draw game
+			draw()
+			fps_second = fps_second + 1
+			-- wait for black start
+			--Screen.waitVblankStart()
+		end
 	end
 	
 end
