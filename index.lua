@@ -9,8 +9,10 @@ DISPLAY_HEIGHT = 544
 VERSION = "0.1"
 
 -- game constants
-BUTTON = { CROSS = 1, CIRCLE = 2, TRIANGLE = 3, SQUARE = 4, LTRIGGER = 5, RTRIGGER = 6, LEFT = 7, RIGHT = 8, UP = 9, DOWN = 10, ANALOG = 11, START = 12, SELECT = 13 }
 FIELD = {WIDTH = 900, HEIGHT = 530}
+
+-- loads
+sfx = Graphics.loadImage("app0:/assets/sfx.png")
 
 -- color definitions
 local white 	= Color.new(255, 255, 255)
@@ -25,12 +27,10 @@ local orange	= Color.new(255, 128, 0)
 local seablue	= Color.new(0, 255, 255)
 local purple	= Color.new(255, 0, 255)
 
-local grey_1	= Color.new(244, 244, 244)
-local grey_2	= Color.new(160, 160, 160)
-local grey_3	= Color.new(96, 96, 96)
 
 -- vars
 atoms = {} 
+
 -- atom states
 STATE = {INIT = 1, EXPANDING = 2, EXPLODE = 3, MERGED = 4}
 ATOM = {
@@ -40,7 +40,7 @@ ATOM = {
 			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 1.5, SCORE = 35},  
 			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.15, SCORE = 50},  
 			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, SCORE = 70},  
-			{NAME = "NITROGEN", SIZE = 7, COLOR = seablue, EXPAND = 1.01, SCORE = 100}
+			--{NAME = "NITROGEN", SIZE = 7, COLOR = seablue, EXPAND = 1.01, SCORE = 100}
 		}
 game = {fps = 60, start = Timer.new(), last_tick = 0, step = 10}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
@@ -95,7 +95,7 @@ function draw()
 	Graphics.initBlend()
 	
 	-- background
-	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, grey_3)
+	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, black)
 	
 	Graphics.debugPrint(500, 30, game.fps, red)
 	Graphics.debugPrint(500, 90, score, red)
@@ -305,6 +305,16 @@ function implode_atoms(delta)
 				end
 			else
 				atoms[i].implode = atoms[i].implode + 1
+				
+				if (atoms[i].implode < 10) then
+					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 1)
+				elseif (atoms[i].implode < 30) then
+					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 2)
+				elseif (atoms[i].implode < 50) then
+					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 3)
+				elseif (atoms[i].implode < 70) then
+					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 4)
+				end
 			end
 		end
 		i = i + 1
@@ -460,12 +470,43 @@ function main()
 	
 end
 
+SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
+
+function sfx_ending(x, y, transition, state)
+	-- size of effect
+	local size_x = 58
+	local size_y = 58
+	local offset_x = 5
+	local offset_y = 5
+	local transition_choise = 0
+	
+	-- determ y position
+	if transition == SFX.RED_TO_YELLOW or transition == SFX.RED_TO_YELLOW then transition_choise = 0
+	elseif transition == SFX.GREEN_TO_BLUE or transition == SFX.GREEN_TO_BLUE then transition_choise = size_y
+	elseif transition == SFX.PURPLE_TO_ORANGE or transition == SFX.PURPLE_TO_ORANGE then transition_choise = size_y*2
+	end
+	
+	-- left to right animations
+	if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
+		
+		Graphics.drawPartialImage(x, y, sfx, offset_x+(state*size_x), offset_y+transition_choise, size_x, size_y)
+		
+	-- right to left animations
+	elseif transition == SFX.YELLOW_TO_RED or transition == SFX.BLUE_TO_GREEN or transition == SFX.ORANGE_TO_PURPLE then
+		-- rotate order
+		state = math.abs(state - 6)
+		Graphics.drawPartialImage(x, y, sfx, offset_x+(state*size_x), offset_y+transition_choise, size_x, size_y)
+	end
+	
+	
+end
+
 -- close all resources
 -- while not strictly necessary, its clean
 function clean_exit()
 
 	-- free images
-	-- Graphics.freeImage(control)
+	Graphics.freeImage(sfx)
 	
 	-- close music files
 	-- Sound.close(snd_background)
