@@ -10,6 +10,7 @@ VERSION = "0.1"
 
 -- game constants
 FIELD = {WIDTH = 900, HEIGHT = 530}
+SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
 
 -- loads
 sfx = Graphics.loadImage("app0:/assets/sfx.png")
@@ -73,7 +74,8 @@ function populate_atoms(n)
 							state = STATE.INIT,
 							expand = 1,
 							implode = 0,
-							score = ATOM[selected_atom].SCORE
+							score = ATOM[selected_atom].SCORE,
+							animated = 0
 						}
 		atom_id = atom_id + 1 
 	end
@@ -117,6 +119,33 @@ function draw()
 	-- draw atoms
 	draw_atoms()
 	
+	-- draw animation before leaving view for ever
+	draw_animation()
+	
+	-- normal
+	-- sfx_ending(100, 100, RED_TO_YELLOW, 1)
+	-- Graphics.fillCircle(100, 100, 7, blue)
+	
+	-- expanded
+	-- sfx_ending(50, 30, 0, 1)	
+	-- sfx_ending(130, 30, 0, 2)	
+	-- sfx_ending(210, 30, 0, 3)	
+	-- sfx_ending(290, 30, 0, 4)	
+	-- sfx_ending(370, 30, 0, 5)
+	
+	-- sfx_ending(50, 100, 1, 1)	
+	-- sfx_ending(130, 100, 1, 2)	
+	-- sfx_ending(210, 100, 1, 3)	
+	-- sfx_ending(290, 100, 1, 4)	
+	-- sfx_ending(370, 100, 1, 5)
+	
+	-- sfx_ending(50, 160, 2, 1)	
+	-- sfx_ending(130, 160, 2, 2)	
+	-- sfx_ending(210, 160, 2, 3)	
+	-- sfx_ending(290, 160, 2, 4)	
+	-- sfx_ending(370, 160, 2, 5)
+	
+	
 	-- Terminating drawing phase
 	Graphics.termBlend()
 	Screen.flip()
@@ -130,14 +159,30 @@ function draw_user()
 end
 
 -- draw atoms
+function draw_animation()
+	local i = 0
+	local count_atoms = #atoms
+	while i < count_atoms do
+		if atoms[i].expand <= 1 and (atoms[i].state == STATE.EXPLODE or atoms[i].state == STATE.MERGED) then
+			if atoms[i].animated < 25 then
+				-- 1.5 second ~ 90
+				sfx_ending(atoms[i].x, atoms[i].y, 1, math.ceil(atoms[i].animated/5))
+				atoms[i].animated = atoms[i].animated + 1
+			end
+		end 
+		i = i + 1
+	end
+end
+
+-- remove from view with a spark
 function draw_atoms()
 	local i = 0
 	local count_atoms = #atoms
 	while i < count_atoms do
 		if atoms[i].state ~= STATE.MERGED
 		then
-			-- apply a channel to color if expanding
-			if atoms[i].expand > 1 then
+			-- apply a channel to color if expanding or imploding
+			if atoms[i].expand > 1 or atoms[i].state == STATE.EXPLODE then
 				Graphics.fillCircle(atoms[i].x, atoms[i].y, atoms[i].neutrons * atoms[i].expand, Color.new(Color.getR(atoms[i].color), Color.getG(atoms[i].color),Color.getB(atoms[i].color), 150))
 			else
 				Graphics.fillCircle(atoms[i].x, atoms[i].y, atoms[i].neutrons * atoms[i].expand, atoms[i].color)
@@ -305,16 +350,6 @@ function implode_atoms(delta)
 				end
 			else
 				atoms[i].implode = atoms[i].implode + 1
-				
-				if (atoms[i].implode < 10) then
-					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 1)
-				elseif (atoms[i].implode < 30) then
-					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 2)
-				elseif (atoms[i].implode < 50) then
-					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 3)
-				elseif (atoms[i].implode < 70) then
-					sfx_ending(atoms[i].x+30, atoms[i].y+30, RED_TO_YELLOW, 4)
-				end
 			end
 		end
 		i = i + 1
@@ -389,9 +424,27 @@ function distance(x1,y1,x2,y2)
 end
 
 -- read user_input
+opad = SCE_CTRL_RTRIGGER
 function user_input()
 	local pad = Controls.read()
 	
+	if Controls.check(pad, SCE_CTRL_TRIANGLE) and not Controls.check(opad, SCE_CTRL_TRIANGLE) then
+	
+size_x = size_x + 1
+ 
+	elseif Controls.check(pad, SCE_CTRL_SQUARE) and not Controls.check(opad, SCE_CTRL_SQUARE) then
+		
+size_y = size_y + 1
+	elseif Controls.check(pad, SCE_CTRL_CROSS) and not Controls.check(opad, SCE_CTRL_CROSS) then
+
+offset_x = offset_x + 1
+
+	elseif Controls.check(pad, SCE_CTRL_CIRCLE) and not Controls.check(opad, SCE_CTRL_CIRCLE) then
+		
+offset_y = offset_y + 1
+	
+	end
+	opad= pad
 	if not user.activated then
 
 		local x, y = Controls.readTouch()
@@ -470,33 +523,42 @@ function main()
 	
 end
 
-SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
-
+size_x = 70
+size_y = 70
+offset_x = 0
+offset_y = 0
 function sfx_ending(x, y, transition, state)
 	-- size of effect
-	local size_x = 58
-	local size_y = 58
-	local offset_x = 5
-	local offset_y = 5
-	local transition_choise = 0
-	
+	local size_x = size_x
+	local size_y = size_y
+	local offset_x = offset_x
+	local offset_y = offset_y
+	local transition_choise = 1
+	local move_x = size_x / 2 -- circle are from center
+	local move_y = size_y / 2 -- this is a square
+	local state = state -1
 	-- determ y position
-	if transition == SFX.RED_TO_YELLOW or transition == SFX.RED_TO_YELLOW then transition_choise = 0
-	elseif transition == SFX.GREEN_TO_BLUE or transition == SFX.GREEN_TO_BLUE then transition_choise = size_y
-	elseif transition == SFX.PURPLE_TO_ORANGE or transition == SFX.PURPLE_TO_ORANGE then transition_choise = size_y*2
-	end
+	-- if transition == SFX.RED_TO_YELLOW or transition == SFX.RED_TO_YELLOW then transition_choise = 0
+	-- elseif transition == SFX.GREEN_TO_BLUE or transition == SFX.GREEN_TO_BLUE then transition_choise = size_y
+	-- elseif transition == SFX.PURPLE_TO_ORANGE or transition == SFX.PURPLE_TO_ORANGE then transition_choise = size_y*2
+	-- end
 	
+	Graphics.debugPrint(50, 50, "size_x" .. size_x, red)
+	Graphics.debugPrint(50, 80, "size_y" .. size_y, red)
+	Graphics.debugPrint(50, 110, "offset_x" .. offset_x, red)
+	Graphics.debugPrint(50, 140, "offset_y" .. offset_y, red)
 	-- left to right animations
-	if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
+	--if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
 		
-		Graphics.drawPartialImage(x, y, sfx, offset_x+(state*size_x), offset_y+transition_choise, size_x, size_y)
+		-- Graphics.drawPartialImage(x-move_x, y-move_y, sfx, offset_x+(state*size_x), offset_y+(transition*size_y), size_x, size_y, Color.new(255,255,255,150))
+		Graphics.drawImageExtended(x, y, sfx, offset_x+(state*size_x), offset_y+(transition*size_y), size_x, size_y, 0, 1+(state*3/10), 1+(state*3/10), Color.new(255,255,255,150-(state*10)))
 		
 	-- right to left animations
-	elseif transition == SFX.YELLOW_TO_RED or transition == SFX.BLUE_TO_GREEN or transition == SFX.ORANGE_TO_PURPLE then
+	--elseif transition == SFX.YELLOW_TO_RED or transition == SFX.BLUE_TO_GREEN or transition == SFX.ORANGE_TO_PURPLE then
 		-- rotate order
-		state = math.abs(state - 6)
-		Graphics.drawPartialImage(x, y, sfx, offset_x+(state*size_x), offset_y+transition_choise, size_x, size_y)
-	end
+		-- state = math.abs(state - 6)
+		-- Graphics.drawPartialImage(x, y, sfx, offset_x+(state*size_x), offset_y+transition_choise, size_x, size_y)
+	-- end
 	
 	
 end

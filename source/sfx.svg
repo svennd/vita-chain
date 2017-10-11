@@ -109,19 +109,6 @@
          stdDeviation="0.51502204"
          id="feGaussianBlur4827-4" />
     </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter5055"
-       x="-0.82315348"
-       width="2.646307"
-       y="-0.031134711"
-       height="1.0622694">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.05318503"
-         id="feGaussianBlur5057" />
-    </filter>
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5063"
@@ -648,9 +635,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.4130019"
-     inkscape:cx="217.6908"
-     inkscape:cy="994.43401"
+     inkscape:zoom="1.206501"
+     inkscape:cx="-83.059021"
+     inkscape:cy="1101.8488"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -667,7 +654,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -676,407 +663,486 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g4854"
-       transform="translate(-20.833317,-9.2545967)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001">
-      <circle
-         r="4.9205008"
-         cy="19.845562"
-         cx="32.055691"
-         id="path4555"
-         style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813)" />
-      <circle
-         r="3.9319477"
-         cy="19.845562"
-         cx="32.055691"
-         id="path4555-9"
-         style="opacity:1;fill:#800000;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789)" />
-      <circle
-         r="2.5751102"
-         cy="19.845562"
-         cx="32.055691"
-         id="path4555-9-8"
-         style="opacity:1;fill:#ff0000;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825)" />
+       id="g1340"
+       transform="translate(0.23259725,4.3418802)"
+       inkscape:export-filename="C:\Users\svenn\Desktop\vita-tetronimo\vita-chain\assets\sfx.png"
+       inkscape:export-xdpi="86.459999"
+       inkscape:export-ydpi="86.459999">
+      <g
+         transform="translate(1.3229167e-5,-4.5421426)"
+         id="g1230">
+        <g
+           id="g4854"
+           transform="translate(-21.590834,-9.4096638)"
+           inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+           inkscape:export-xdpi="82.720001"
+           inkscape:export-ydpi="82.720001">
+          <circle
+             r="4.9205008"
+             cy="19.845562"
+             cx="32.055691"
+             id="path4555"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813)" />
+          <circle
+             r="3.9319477"
+             cy="19.845562"
+             cx="32.055691"
+             id="path4555-9"
+             style="opacity:1;fill:#800000;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789)" />
+          <circle
+             r="2.5751102"
+             cy="19.845562"
+             cx="32.055691"
+             id="path4555-9-8"
+             style="opacity:1;fill:#ff0000;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825)" />
+        </g>
+        <g
+           id="g1111"
+           transform="translate(5.8316975,-0.15506714)">
+          <g
+             id="g1207"
+             transform="translate(-4.031746)">
+            <circle
+               inkscape:export-ydpi="82.720001"
+               inkscape:export-xdpi="82.720001"
+               inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+               r="4.9205008"
+               cy="10.590965"
+               cx="29.134188"
+               id="path4555-8"
+               style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-6)" />
+            <circle
+               style="opacity:1;fill:#800000;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-0)"
+               id="path4555-9-0"
+               cx="29.134188"
+               cy="10.590965"
+               r="3.9319477"
+               inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+               inkscape:export-xdpi="82.720001"
+               inkscape:export-ydpi="82.720001" />
+            <circle
+               style="opacity:1;fill:#ff5a00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-8)"
+               id="path4555-9-8-0"
+               cx="29.134188"
+               cy="10.590965"
+               r="2.5751102"
+               inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+               inkscape:export-xdpi="82.720001"
+               inkscape:export-ydpi="82.720001" />
+          </g>
+        </g>
+        <g
+           id="g1201"
+           transform="translate(4.3574163,-0.15506714)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="10.590965"
+             cx="47.046005"
+             id="path4555-1"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="10.590965"
+             cx="47.046005"
+             id="path4555-9-5"
+             style="opacity:1;fill:#801900;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="10.590965"
+             cx="47.046005"
+             id="path4555-9-8-6"
+             style="opacity:1;fill:#ff9a00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1)" />
+        </g>
+        <g
+           id="g1196"
+           transform="translate(6.9148869,-0.15506714)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="10.590965"
+             cx="64.957817"
+             id="path4555-1-5"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="10.590965"
+             cx="64.957817"
+             id="path4555-9-5-8"
+             style="opacity:1;fill:#803200;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="10.590965"
+             cx="64.957817"
+             id="path4555-9-8-6-0"
+             style="opacity:1;fill:#ffce00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7)" />
+        </g>
+        <g
+           id="g1191"
+           transform="translate(9.4723498,-0.15506714)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="10.590965"
+             cx="82.869637"
+             id="path4555-1-5-9"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-5)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="10.590965"
+             cx="82.869637"
+             id="path4555-9-5-8-3"
+             style="opacity:1;fill:#806400;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-7)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="10.590965"
+             cx="82.869637"
+             id="path4555-9-8-6-0-5"
+             style="opacity:1;fill:#f0ff00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-7)" />
+        </g>
+      </g>
+      <g
+         transform="translate(0.31014754,-2.2226368)"
+         id="g1252">
+        <g
+           id="g1166"
+           transform="translate(-1.5483768,-0.15506715)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-64)"
+             id="path4555-3"
+             cx="11.222374"
+             cy="28.740768"
+             r="4.9205008" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#009600;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-8)"
+             id="path4555-9-1"
+             cx="11.222374"
+             cy="28.740768"
+             r="3.9319477" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#02f525;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-2)"
+             id="path4555-9-8-9"
+             cx="11.222374"
+             cy="28.740768"
+             r="2.5751102" />
+        </g>
+        <g
+           id="g1171"
+           transform="translate(1.0090918,-0.15506715)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-6-8)"
+             id="path4555-8-2"
+             cx="29.134188"
+             cy="28.740768"
+             r="4.9205008" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#009619;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-0-4)"
+             id="path4555-9-0-2"
+             cx="29.134188"
+             cy="28.740768"
+             r="3.9319477" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#26f176;fill-opacity:1;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-8-0)"
+             id="path4555-9-8-0-5"
+             cx="29.134188"
+             cy="28.740768"
+             r="2.5751102" />
+        </g>
+        <g
+           id="g1176"
+           transform="translate(3.5665566,-0.15506715)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-9)"
+             id="path4555-1-3"
+             cx="47.046005"
+             cy="28.740768"
+             r="4.9205008" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#007d32;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-6)"
+             id="path4555-9-5-6"
+             cx="47.046005"
+             cy="28.740768"
+             r="3.9319477" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             style="opacity:1;fill:#06f5b9;fill-opacity:1;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-8)"
+             id="path4555-9-8-6-6"
+             cx="47.046005"
+             cy="28.740768"
+             r="2.5751102" />
+        </g>
+        <g
+           id="g1181"
+           transform="translate(6.1240272,-0.15506715)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="28.740768"
+             cx="64.957817"
+             id="path4555-1-5-6"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-9)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="28.740768"
+             cx="64.957817"
+             id="path4555-9-5-8-0"
+             style="opacity:1;fill:#00644b;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-2)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="28.740768"
+             cx="64.957817"
+             id="path4555-9-8-6-0-7"
+             style="opacity:1;fill:#01b8f5;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-8)" />
+        </g>
+        <g
+           id="g1186"
+           transform="translate(8.6814902,-0.15506715)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="28.740768"
+             cx="82.869637"
+             id="path4555-1-5-9-1"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-5-8)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="28.740768"
+             cx="82.869637"
+             id="path4555-9-5-8-3-5"
+             style="opacity:1;fill:#006496;fill-opacity:1;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-7-2)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="28.740768"
+             cx="82.869637"
+             id="path4555-9-8-6-0-5-0"
+             style="opacity:1;fill:#0023f5;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-7-0)" />
+        </g>
+      </g>
+      <g
+         transform="translate(1.8608191,-0.67844401)"
+         id="g1274">
+        <g
+           id="g1161"
+           transform="translate(-2.9439812,0.62026862)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="46.890549"
+             cx="11.222374"
+             id="path4555-11"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-3)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="46.890549"
+             cx="11.222374"
+             id="path4555-9-9"
+             style="opacity:1;fill:#800096;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-9)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="46.890549"
+             cx="11.222374"
+             id="path4555-9-8-3"
+             style="opacity:1;fill:#ff00ff;fill-opacity:1;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-0)" />
+        </g>
+        <g
+           id="g1156"
+           transform="translate(-0.38651264,0.62026862)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="46.890549"
+             cx="29.134188"
+             id="path4555-8-3"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-6-85)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="46.890549"
+             cx="29.134188"
+             id="path4555-9-0-4"
+             style="opacity:1;fill:#800096;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-0-3)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="46.890549"
+             cx="29.134188"
+             id="path4555-9-8-0-6"
+             style="opacity:1;fill:#ff21a0;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-8-7)" />
+        </g>
+        <g
+           id="g1151"
+           transform="translate(2.1709522,0.62026862)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="46.890549"
+             cx="47.046005"
+             id="path4555-1-2"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-1)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="46.890549"
+             cx="47.046005"
+             id="path4555-9-5-9"
+             style="opacity:1;fill:#800064;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-68)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="46.890549"
+             cx="47.046005"
+             id="path4555-9-8-6-8"
+             style="opacity:1;fill:#ff5aa0;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-0)" />
+        </g>
+        <g
+           id="g1146"
+           transform="translate(4.7284228,0.62026862)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="46.890549"
+             cx="64.957817"
+             id="path4555-1-5-3"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-1)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="46.890549"
+             cx="64.957817"
+             id="path4555-9-5-8-7"
+             style="opacity:1;fill:#80004b;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-20)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="46.890549"
+             cx="64.957817"
+             id="path4555-9-8-6-0-4"
+             style="opacity:1;fill:#ff8264;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-0)" />
+        </g>
+        <g
+           id="g1141"
+           transform="translate(7.2858858,0.62026862)">
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="4.9205008"
+             cy="46.890549"
+             cx="82.869637"
+             id="path4555-1-5-9-7"
+             style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-5-89)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="3.9319477"
+             cy="46.890549"
+             cx="82.869637"
+             id="path4555-9-5-8-3-54"
+             style="opacity:1;fill:#80004b;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-7-6)" />
+          <circle
+             inkscape:export-ydpi="82.720001"
+             inkscape:export-xdpi="82.720001"
+             inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
+             r="2.5751102"
+             cy="46.890549"
+             cx="82.869637"
+             id="path4555-9-8-6-0-5-7"
+             style="opacity:1;fill:#ffa300;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-7-05)" />
+        </g>
+      </g>
     </g>
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-6)"
-       id="path4555-8"
-       cx="29.134188"
-       cy="10.590965"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#800000;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-0)"
-       id="path4555-9-0"
-       cx="29.134188"
-       cy="10.590965"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ff5a00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-8)"
-       id="path4555-9-8-0"
-       cx="29.134188"
-       cy="10.590965"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4)"
-       id="path4555-1"
-       cx="47.046005"
-       cy="10.590965"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#801900;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05)"
-       id="path4555-9-5"
-       cx="47.046005"
-       cy="10.590965"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ff9a00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1)"
-       id="path4555-9-8-6"
-       cx="47.046005"
-       cy="10.590965"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5)"
-       id="path4555-1-5"
-       cx="64.957817"
-       cy="10.590965"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#803200;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1)"
-       id="path4555-9-5-8"
-       cx="64.957817"
-       cy="10.590965"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ffce00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7)"
-       id="path4555-9-8-6-0"
-       cx="64.957817"
-       cy="10.590965"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-5)"
-       id="path4555-1-5-9"
-       cx="82.869637"
-       cy="10.590965"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#806400;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-7)"
-       id="path4555-9-5-8-3"
-       cx="82.869637"
-       cy="10.590965"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#f0ff00;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-7)"
-       id="path4555-9-8-6-0-5"
-       cx="82.869637"
-       cy="10.590965"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="4.9205008"
-       cy="28.740768"
-       cx="29.134188"
-       id="path4555-8-2"
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-6-8)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="4.9205008"
-       cy="28.740768"
-       cx="47.046005"
-       id="path4555-1-3"
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-9)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-9)"
-       id="path4555-1-5-6"
-       cx="64.957817"
-       cy="28.740768"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-5-8)"
-       id="path4555-1-5-9-1"
-       cx="82.869637"
-       cy="28.740768"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="4.9205008"
-       cy="28.740768"
-       cx="11.222374"
-       id="path4555-3"
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-64)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="3.9319477"
-       cy="28.740768"
-       cx="11.222374"
-       id="path4555-9-1"
-       style="opacity:1;fill:#009600;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-8)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="2.5751102"
-       cy="28.740768"
-       cx="11.222374"
-       id="path4555-9-8-9"
-       style="opacity:1;fill:#02f525;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-2)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="3.9319477"
-       cy="28.740768"
-       cx="29.134188"
-       id="path4555-9-0-2"
-       style="opacity:1;fill:#009619;fill-opacity:0.98492462;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-0-4)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="2.5751102"
-       cy="28.740768"
-       cx="29.134188"
-       id="path4555-9-8-0-5"
-       style="opacity:1;fill:#26f176;fill-opacity:1;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-8-0)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="3.9319477"
-       cy="28.740768"
-       cx="47.046005"
-       id="path4555-9-5-6"
-       style="opacity:1;fill:#007d32;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-6)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       r="2.5751102"
-       cy="28.740768"
-       cx="47.046005"
-       id="path4555-9-8-6-6"
-       style="opacity:1;fill:#06f5b9;fill-opacity:1;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-8)"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#00644b;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-2)"
-       id="path4555-9-5-8-0"
-       cx="64.957817"
-       cy="28.740768"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#01b8f5;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-8)"
-       id="path4555-9-8-6-0-7"
-       cx="64.957817"
-       cy="28.740768"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#006496;fill-opacity:1;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-7-2)"
-       id="path4555-9-5-8-3-5"
-       cx="82.869637"
-       cy="28.740768"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#0023f5;fill-opacity:0.98492462;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-7-0)"
-       id="path4555-9-8-6-0-5-0"
-       cx="82.869637"
-       cy="28.740768"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-3)"
-       id="path4555-11"
-       cx="11.222374"
-       cy="46.890549"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#800096;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-9)"
-       id="path4555-9-9"
-       cx="11.222374"
-       cy="46.890549"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ff00ff;fill-opacity:1;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-0)"
-       id="path4555-9-8-3"
-       cx="11.222374"
-       cy="46.890549"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-6-85)"
-       id="path4555-8-3"
-       cx="29.134188"
-       cy="46.890549"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#800096;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-0-3)"
-       id="path4555-9-0-4"
-       cx="29.134188"
-       cy="46.890549"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ff21a0;fill-opacity:0.98492461;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-8-7)"
-       id="path4555-9-8-0-6"
-       cx="29.134188"
-       cy="46.890549"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-1)"
-       id="path4555-1-2"
-       cx="47.046005"
-       cy="46.890549"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#800064;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-68)"
-       id="path4555-9-5-9"
-       cx="47.046005"
-       cy="46.890549"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ff5aa0;fill-opacity:0.98492461;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-0)"
-       id="path4555-9-8-6-8"
-       cx="47.046005"
-       cy="46.890549"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-1)"
-       id="path4555-1-5-3"
-       cx="64.957817"
-       cy="46.890549"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#80004b;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-20)"
-       id="path4555-9-5-8-7"
-       cx="64.957817"
-       cy="46.890549"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ff8264;fill-opacity:0.98492461;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-0)"
-       id="path4555-9-8-6-0-4"
-       cx="64.957817"
-       cy="46.890549"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:0.98492462;stroke:none;stroke-width:0.52794117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4813-4-5-5-89)"
-       id="path4555-1-5-9-7"
-       cx="82.869637"
-       cy="46.890549"
-       r="4.9205008"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#80004b;fill-opacity:0.98492461;stroke:none;stroke-width:0.42187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4789-05-1-7-6)"
-       id="path4555-9-5-8-3-54"
-       cx="82.869637"
-       cy="46.890549"
-       r="3.9319477"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
-    <circle
-       style="opacity:1;fill:#ffa300;fill-opacity:0.98492461;stroke:none;stroke-width:0.27629435;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4825-1-7-7-05)"
-       id="path4555-9-8-6-0-5-7"
-       cx="82.869637"
-       cy="46.890549"
-       r="2.5751102"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\assets\sfx.png"
-       inkscape:export-xdpi="82.720001"
-       inkscape:export-ydpi="82.720001" />
   </g>
 </svg>
