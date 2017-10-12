@@ -192,7 +192,7 @@ function draw_atoms()
 	end
 end
 
-debug_file = System.openFile("ux0:/data/chain_debug", FWRITE)
+-- debug_file = System.openFile("ux0:/data/chain_debug", FWRITE)
 function debug_log(msg)
 	System.writeFile(debug_file, msg, string.len(msg))
 end

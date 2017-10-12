@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="407.41186"
+     inkscape:cx="68.000607"
      inkscape:cy="844.92394"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,24 +53,24 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="opacity:0.5;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.5;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2.92006183;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1471"
-       width="175.32881"
-       height="87.664406"
+       width="160.64217"
+       height="90.648079"
        x="20.847023"
-       y="13.96157"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\sce_sys\livearea\contents\startup.png"
-       inkscape:export-xdpi="40.560001"
-       inkscape:export-ydpi="40.560001" />
+       y="10.977897"
+       inkscape:export-filename="C:\Users\svenn\Desktop\vita-tetronimo\vita-chain\sce_sys\livearea\contents\startup.png"
+       inkscape:export-xdpi="44.27"
+       inkscape:export-ydpi="44.27" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#248fcf;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="27.796028"
        y="49.241146"
        id="text1475"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\sce_sys\livearea\contents\startup.png"
-       inkscape:export-xdpi="40.560001"
-       inkscape:export-ydpi="40.560001"><tspan
+       inkscape:export-filename="C:\Users\svenn\Desktop\vita-tetronimo\vita-chain\sce_sys\livearea\contents\startup.png"
+       inkscape:export-xdpi="44.27"
+       inkscape:export-ydpi="44.27"><tspan
          sodipodi:role="line"
          id="tspan1473"
          x="27.796028"
@@ -82,9 +82,9 @@
        x="86.060783"
        y="83.718918"
        id="text1479"
-       inkscape:export-filename="C:\Users\svenn\Desktop\vita-chain\sce_sys\livearea\contents\startup.png"
-       inkscape:export-xdpi="40.560001"
-       inkscape:export-ydpi="40.560001"><tspan
+       inkscape:export-filename="C:\Users\svenn\Desktop\vita-tetronimo\vita-chain\sce_sys\livearea\contents\startup.png"
+       inkscape:export-xdpi="44.27"
+       inkscape:export-ydpi="44.27"><tspan
          sodipodi:role="line"
          id="tspan1477"
          x="86.060783"
