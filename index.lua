@@ -43,7 +43,7 @@ ATOM = {
 			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, SCORE = 70},  
 			--{NAME = "NITROGEN", SIZE = 7, COLOR = seablue, EXPAND = 1.01, SCORE = 100}
 		}
-game = {fps = 60, start = Timer.new(), last_tick = 0, step = 10}
+game = {state = 0, fps = 60, start = Timer.new(), last_tick = 0, step = 10}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
 MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 500 }
@@ -467,6 +467,15 @@ end
 -- main function
 function main()
 	
+	if game.state == 0 then
+		-- loading screen
+		-- menu
+		dofile("app0:/menu.lua")
+		
+	elseif game.state == 1 then
+		-- game start
+	end
+	
 	-- initiate game variables
 	game_start()
 	
@@ -543,10 +552,10 @@ function sfx_ending(x, y, transition, state)
 	-- elseif transition == SFX.PURPLE_TO_ORANGE or transition == SFX.PURPLE_TO_ORANGE then transition_choise = size_y*2
 	-- end
 	
-	Graphics.debugPrint(50, 50, "size_x" .. size_x, red)
-	Graphics.debugPrint(50, 80, "size_y" .. size_y, red)
-	Graphics.debugPrint(50, 110, "offset_x" .. offset_x, red)
-	Graphics.debugPrint(50, 140, "offset_y" .. offset_y, red)
+	-- Graphics.debugPrint(50, 50, "size_x" .. size_x, red)
+	-- Graphics.debugPrint(50, 80, "size_y" .. size_y, red)
+	-- Graphics.debugPrint(50, 110, "offset_x" .. offset_x, red)
+	-- Graphics.debugPrint(50, 140, "offset_y" .. offset_y, red)
 	-- left to right animations
 	--if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
 		
