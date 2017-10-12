@@ -103,8 +103,6 @@ function user_input()
 	if x ~= nil then
 		user.x = x
 		user.y = y
-		user.state = STATE.EXPANDING
-		user.activated = true
 	end
 end
 
