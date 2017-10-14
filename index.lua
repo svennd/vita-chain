@@ -9,12 +9,18 @@ DISPLAY_HEIGHT = 544
 VERSION = "0.1"
 
 -- game constants
-FIELD = {WIDTH = 900, HEIGHT = 530}
+FIELD = {WIDTH = 700, HEIGHT = 400}
 SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
 MENU = {MENU = 0, START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
+LEVEL = {START = 1, VERIFY = 2, REQUIREMENT = {3, 5, 10, 15}}
 
 -- loads
 img_sfx = Graphics.loadImage("app0:/assets/sfx.png")
+img_background = Graphics.loadImage("app0:/assets/bg.png")
+img_button_1 = Graphics.loadImage("app0:/assets/button_1.png")
+img_button_2 = Graphics.loadImage("app0:/assets/button_2.png")
+img_button_3 = Graphics.loadImage("app0:/assets/button_3.png")
+img_button_4 = Graphics.loadImage("app0:/assets/button_4.png")
 main_font = Font.load("app0:/assets/xolonium.ttf")
 
 -- color definitions
@@ -30,28 +36,54 @@ orange	= Color.new(255, 128, 0)
 seablue	= Color.new(0, 255, 255)
 purple	= Color.new(255, 0, 255)
 
-
 -- vars
 atoms = {} 
+
+-- statics
+atom_count = {total = 0, init = 0, expanding = 0, explode = 0, merged = 0}
 
 -- atom states
 STATE = {INIT = 1, EXPANDING = 2, EXPLODE = 3, MERGED = 4}
 ATOM = {
-			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 3, SCORE = 10}, 
-			{NAME = "HELIUM", SIZE = 7, COLOR = red, EXPAND = 2, SCORE = 15},  
-			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 1.7, SCORE = 25}, 
-			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 1.5, SCORE = 35},  
-			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.15, SCORE = 50},  
-			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, SCORE = 70},  
-			--{NAME = "NITROGEN", SIZE = 7, COLOR = seablue, EXPAND = 1.01, SCORE = 100}
+			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 4, FX = SFX.RED_TO_YELLOW, SCORE = 10}, 
+			{NAME = "HELIUM", SIZE = 7, COLOR = red, EXPAND = 3, FX = SFX.YELLOW_TO_RED, SCORE = 15},  
+			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 1.7, FX = SFX.BLUE_TO_GREEN, SCORE = 25}, 
+			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 1.5, FX = SFX.GREEN_TO_BLUE, SCORE = 35},  
+			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.15, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
+			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
-game = {state = 0, fps = 60, start = Timer.new(), last_tick = 0, step = 10}
+game = {state = 0, fps = 60, start = Timer.new(), last_tick = 0, step = 10, level = 1, loser = false, succes = false}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
 MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 500 }
 score = 0
 
-function populate_atoms(n)	
+function level(n, step)
+	if step == LEVEL.START then
+		if n == 1 then
+			populate_atoms(10, 3)
+		elseif n == 2 then
+			populate_atoms(15, 3)
+		elseif n == 3 then
+			populate_atoms(25, 3)
+		elseif n == 4 then
+			populate_atoms(35, 3)
+		end
+	elseif step == LEVEL.VERIFY then
+		return target_get(LEVEL.REQUIREMENT[n])
+	end
+end
+
+-- can be more complex
+function target_get(n)
+	if atom_count.merged >= n then
+		return true
+	else
+		return false
+	end
+end
+
+function populate_atoms(n, max_atom)	
 	-- seed for selected_atom
 	math.randomseed(os.clock()*1000)	
 	
@@ -62,7 +94,7 @@ function populate_atoms(n)
 	local atom_id = 0
 	while atom_id < (n+1) do
 	
-		local selected_atom = math.random(1, #ATOM) -- should be #ATOM
+		local selected_atom = math.random(1, max_atom) -- should be #ATOM
 		
 		-- dx, dy = 1-3% of the field per step
 		atoms[atom_id] = {
@@ -77,7 +109,8 @@ function populate_atoms(n)
 							expand = 1,
 							implode = 0,
 							score = ATOM[selected_atom].SCORE,
-							animated = 0
+							animated = 0,
+							fx = ATOM[selected_atom].FX
 						}
 		atom_id = atom_id + 1 
 	end
@@ -100,21 +133,32 @@ function draw()
 	
 	-- background
 	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, black)
-	
-	-- Graphics.debugPrint(500, 30, game.fps, red)
-	Graphics.debugPrint(550, 30, game.state, red)
-	Graphics.debugPrint(500, 90, score, red)
-	
-	-- local i = 0
-	-- local count_atoms = #atoms
-	-- while i < count_atoms do
-		-- Graphics.debugPrint(10,200+(i*20), atoms[i].x .. "  " .. atoms[i].y, Color.new(255, 255, 255))
-		-- Graphics.debugPrint(10,200+(i*20), atoms[i].name, Color.new(255, 255, 255))
-		-- i = i + 1
-	-- end
-
+	Graphics.drawImage(0,0, img_background)
+			
 	-- draw field
 	draw_field()
+	
+	-- score
+	Font.setPixelSizes(main_font, 20)
+	if game.succes then
+		Font.print(main_font, 806, 511, score, green)
+	else
+		Font.print(main_font, 806, 511, score, white)
+	end
+	
+	-- level
+	if game.succes then
+		Font.print(main_font, 50, 511, game.level, green)
+	else
+		Font.print(main_font, 50, 511, game.level, white)
+	end
+	
+	-- atom count
+	if game.succes then
+		Font.print(main_font, 300, 511, LEVEL.REQUIREMENT[game.level] .. "/" .. atom_count.merged .. " " .. atom_count.total, green)
+	else
+		Font.print(main_font, 300, 511, LEVEL.REQUIREMENT[game.level] .. "/" .. atom_count.merged .. " " .. atom_count.total, white)
+	end
 	
 	-- draw user activation
 	draw_user()
@@ -125,33 +169,18 @@ function draw()
 	-- draw animation before leaving view for ever
 	draw_animation()
 	
-	-- normal
-	-- sfx_ending(100, 100, RED_TO_YELLOW, 1)
-	-- Graphics.fillCircle(100, 100, 7, blue)
-	
-	-- expanded
-	-- sfx_ending(50, 30, 0, 1)	
-	-- sfx_ending(130, 30, 0, 2)	
-	-- sfx_ending(210, 30, 0, 3)	
-	-- sfx_ending(290, 30, 0, 4)	
-	-- sfx_ending(370, 30, 0, 5)
-	
-	-- sfx_ending(50, 100, 1, 1)	
-	-- sfx_ending(130, 100, 1, 2)	
-	-- sfx_ending(210, 100, 1, 3)	
-	-- sfx_ending(290, 100, 1, 4)	
-	-- sfx_ending(370, 100, 1, 5)
-	
-	-- sfx_ending(50, 160, 2, 1)	
-	-- sfx_ending(130, 160, 2, 2)	
-	-- sfx_ending(210, 160, 2, 3)	
-	-- sfx_ending(290, 160, 2, 4)	
-	-- sfx_ending(370, 160, 2, 5)
-	
-	
 	-- Terminating drawing phase
 	Graphics.termBlend()
 	Screen.flip()
+end
+
+-- draw loser
+function draw_loser()
+	
+	-- poor kid
+	if game.loser then
+		Graphics.fillRect(300, 600, 110, 600, red)	
+	end
 end
 
 -- draw user
@@ -169,7 +198,7 @@ function draw_animation()
 		if atoms[i].expand <= 1 and (atoms[i].state == STATE.EXPLODE or atoms[i].state == STATE.MERGED) then
 			if atoms[i].animated < 25 then
 				-- 1.5 second ~ 90
-				sfx_ending(atoms[i].x, atoms[i].y, 1, math.ceil(atoms[i].animated/5))
+				sfx_ending(atoms[i].x, atoms[i].y, atoms[i].fx, math.ceil(atoms[i].animated/5))
 				atoms[i].animated = atoms[i].animated + 1
 			end
 		end 
@@ -195,13 +224,22 @@ function draw_atoms()
 	end
 end
 
--- debug_file = System.openFile("ux0:/data/chain_debug", FWRITE)
-function debug_log(msg)
-	System.writeFile(debug_file, msg, string.len(msg))
-end
- 
+-- ui + field
 function draw_field()
-	draw_box(10, FIELD.WIDTH, 10, FIELD.HEIGHT, 10, white)
+	-- the backfield
+	draw_box(10, FIELD.WIDTH, 10, FIELD.HEIGHT, 10, black)
+	
+	-- level
+	Graphics.drawImage(6, 498, img_button_1)
+	
+	-- merged / free floaters
+	Graphics.drawImage(250, 498, img_button_2)
+	
+	-- target 
+	Graphics.drawImage(500, 498, img_button_3)
+	
+	-- score 
+	Graphics.drawImage(750, 498, img_button_4)
 end
 
 -- draw a box
@@ -222,11 +260,7 @@ function draw_box(x1, x2, y1, y2, width, color)
 	
 end
 
-function update(delta)
-	-- determ new position of atoms
-	-- local current = Timer.getTime(game.start)
-	-- local elapsed = current - game.last_tick
-	
+function update(delta)	
 	-- chaos
 	move_atoms(delta)
 	
@@ -241,9 +275,75 @@ function update(delta)
 	implode_atoms(delta)
 	implode_user(delta)	
 	
+	-- level validation
+	keep_score()
+	check_level_finished()
+end
 
-	-- update tick
-	-- game.last_tick = current
+function keep_score()
+	local i = 0
+	local count_atoms = #atoms
+	local init = 0
+	local expanding = 0 
+	local explode = 0
+	local merged = 0
+	
+	
+	while i < count_atoms do
+		if atoms[i].state == STATE.INIT then
+			init = init + 1
+		elseif atoms[i].state == STATE.EXPANDING then
+			expanding = expanding + 1
+		elseif atoms[i].state == STATE.EXPLODE then
+			explode = explode + 1
+		elseif atoms[i].state == STATE.MERGED then
+			merged = merged + 1
+		end
+		i = i + 1
+	end
+	
+	-- dont know why this would change but anyway
+	atom_count.total = count_atoms
+	
+	-- seems globals are slow
+	atom_count.init = init
+	atom_count.expanding = expanding
+	atom_count.explode = explode
+	atom_count.merged = merged
+	
+end
+
+function check_level_finished()
+	
+	-- user not yet shot then we cant be finished yet
+	if not user.activated then
+		return false
+	end
+	
+	-- if succesfull finished level up!
+	if level(game.level, LEVEL.VERIFY) then
+		-- oke next level nothing going on anymore
+		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 then
+			atoms = {}
+			game.level = game.level + 1 
+			level(game.level, LEVEL.START)
+			user.activated = false
+			game.succes = false
+		else
+			-- succes 
+			game.succes = true
+		end
+	else
+		-- in case of failed
+			-- user has been shot
+			-- no expanding no exploding (merged or init left)
+		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 then
+			atoms = {}
+			game.loser = true
+		end
+		
+		-- in any other case it is still going
+	end
 end
 
 -- collision detection
@@ -415,7 +515,7 @@ function move_atoms(delta)
 end
 
 function game_start()
-	populate_atoms(30)
+	level(game.level, LEVEL.START)
 	
 	game.last_tick = 0 -- drop ticks
 	Timer.reset(game.start) -- restart game timer
@@ -437,9 +537,6 @@ function game_start()
 			fps_second = 0
 		end
 		
-		-- throttle frame rate
-		--if now > last_frame + timestep then
-			
 		delta = delta + (now - last_frame)
 		last_frame = now			
 		
@@ -466,8 +563,6 @@ function game_start()
 		-- draw game
 		draw()
 		fps_second = fps_second + 1
-			
-		--end
 	end
 end
 
@@ -477,44 +572,30 @@ function distance(x1,y1,x2,y2)
 end
 
 -- read user_input
-opad = SCE_CTRL_RTRIGGER
 function user_input()
-	local pad = Controls.read()
-	
-	if Controls.check(pad, SCE_CTRL_TRIANGLE) and not Controls.check(opad, SCE_CTRL_TRIANGLE) then
-	
-size_x = size_x + 1
- 
-	elseif Controls.check(pad, SCE_CTRL_SQUARE) and not Controls.check(opad, SCE_CTRL_SQUARE) then
-		
-size_y = size_y + 1
-	elseif Controls.check(pad, SCE_CTRL_CROSS) and not Controls.check(opad, SCE_CTRL_CROSS) then
-
-offset_x = offset_x + 1
-
-	elseif Controls.check(pad, SCE_CTRL_CIRCLE) and not Controls.check(opad, SCE_CTRL_CIRCLE) then
-		
-offset_y = offset_y + 1
-	
-	end
-	opad = pad
 	if not user.activated then
 
 		local x, y = Controls.readTouch()
 
+		-- FIELD = {WIDTH = 700, HEIGHT = 400}
+
 		-- first input only
 		if x ~= nil then
-			user.x = x
-			user.y = y
-			user.state = STATE.EXPANDING
-			user.activated = true
+		
+			-- within field
+			if x < FIELD.WIDTH and y < FIELD.HEIGHT then
+				user.x = x
+				user.y = y
+				user.state = STATE.EXPANDING
+				user.activated = true
+			end
 		end
 	end
 	
 	-- exit
-	if Controls.check(pad, SCE_CTRL_SELECT) then
-		clean_exit()
-	end
+	-- if Controls.check(pad, SCE_CTRL_SELECT) then
+		-- clean_exit()
+	-- end
 end
 
 -- main function
@@ -547,55 +628,62 @@ function main()
 	clean_exit()
 end
 
-size_x = 70
-size_y = 70
-offset_x = 0
-offset_y = 0
+-- animate the ending
 function sfx_ending(x, y, transition, state)
 	-- size of effect
-	local size_x = size_x
-	local size_y = size_y
-	local offset_x = offset_x
-	local offset_y = offset_y
-	local transition_choise = 1
+	local size_x = 70
+	local size_y = 70
+	local transition_choise = 0
 	local move_x = size_x / 2 -- circle are from center
 	local move_y = size_y / 2 -- this is a square
-	local state = state -1
-	-- determ y position
-	-- if transition == SFX.RED_TO_YELLOW or transition == SFX.RED_TO_YELLOW then transition_choise = 0
-	-- elseif transition == SFX.GREEN_TO_BLUE or transition == SFX.GREEN_TO_BLUE then transition_choise = size_y
-	-- elseif transition == SFX.PURPLE_TO_ORANGE or transition == SFX.PURPLE_TO_ORANGE then transition_choise = size_y*2
-	-- end
+	local state = state - 1
 	
-	-- Graphics.debugPrint(50, 50, "size_x" .. size_x, red)
-	-- Graphics.debugPrint(50, 80, "size_y" .. size_y, red)
-	-- Graphics.debugPrint(50, 110, "offset_x" .. offset_x, red)
-	-- Graphics.debugPrint(50, 140, "offset_y" .. offset_y, red)
+	-- determ y position
+	if transition == SFX.RED_TO_YELLOW or transition == SFX.YELLOW_TO_RED then transition_choise = 0
+	elseif transition == SFX.GREEN_TO_BLUE or transition == SFX.BLUE_TO_GREEN then transition_choise = 1
+	elseif transition == SFX.PURPLE_TO_ORANGE or transition == SFX.ORANGE_TO_PURPLE then transition_choise = 2
+	end
+	
 	-- left to right animations
 	if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
-		
-		-- Graphics.drawPartialImage(x-move_x, y-move_y, sfx, offset_x+(state*size_x), offset_y+(transition*size_y), size_x, size_y, Color.new(255,255,255,150))
+		-- draw the right sprite and expand
 		Graphics.drawImageExtended(
 								x, -- draw position
 								y, 
 								img_sfx, -- images
-								offset_x+(state*size_x),  -- image start
-								offset_y+(transition*size_y), 
+								(state*size_x),  -- image start
+								(transition_choise*size_y), 
 								size_x,  -- dimensions
 								size_y, 
 								0, 		-- rotation
-								1+(state*4/10),  -- scale, increase every step (explode)
-								1+(state*4/10), 
+								1.3+(state*4/10),  -- scale, increase every step (explode)
+								1.3+(state*4/10), 
 								Color.new(255,255,255,150-(state*10)) -- increase alpha
 								)
 		
 	-- right to left animations
-	--elseif transition == SFX.YELLOW_TO_RED or transition == SFX.BLUE_TO_GREEN or transition == SFX.ORANGE_TO_PURPLE then
-		-- rotate order
-		-- state = math.abs(state - 6)
-		-- Graphics.drawPartialImage(x, y, sfx, offset_x+(state*size_x), offset_y+transition_choise, size_x, size_y)
-	-- end
-	
+	elseif transition == SFX.YELLOW_TO_RED or transition == SFX.BLUE_TO_GREEN or transition == SFX.ORANGE_TO_PURPLE then
+
+		-- keep original state for expansion
+		local original_state = state
+		
+		-- rotate order for color
+		state = math.abs(state - 6)
+		
+		Graphics.drawImageExtended(
+								x, -- draw position
+								y, 
+								img_sfx, -- images
+								(state*size_x),  -- image start
+								(transition_choise*size_y), 
+								size_x,  -- dimensions
+								size_y, 
+								0, 		-- rotation
+								1.3+(original_state*4/10),  -- scale, increase every step (explode)
+								1.3+(original_state*4/10), 
+								Color.new(255,255,255,150-(original_state*10)) -- increase alpha
+								)
+	end
 	
 end
 
@@ -605,6 +693,11 @@ function clean_exit()
 
 	-- free images
 	Graphics.freeImage(img_sfx)
+	Graphics.freeImage(img_background)
+	Graphics.freeImage(img_button_1)
+	Graphics.freeImage(img_button_2)
+	Graphics.freeImage(img_button_3)
+	Graphics.freeImage(img_button_4)
 	
 	-- close music files
 	-- Sound.close(snd_background)
@@ -612,6 +705,11 @@ function clean_exit()
 	-- kill app
 	System.exit()
 	
+end
+
+-- debug_file = System.openFile("ux0:/data/chain_debug", FWRITE)
+function debug_log(msg)
+	System.writeFile(debug_file, msg, string.len(msg))
 end
 
 -- run the code
