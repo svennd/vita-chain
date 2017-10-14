@@ -11,22 +11,24 @@ VERSION = "0.1"
 -- game constants
 FIELD = {WIDTH = 900, HEIGHT = 530}
 SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
+MENU = {MENU = 0, START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
 
 -- loads
-sfx = Graphics.loadImage("app0:/assets/sfx.png")
+img_sfx = Graphics.loadImage("app0:/assets/sfx.png")
+main_font = Font.load("app0:/assets/xolonium.ttf")
 
 -- color definitions
-local white 	= Color.new(255, 255, 255)
-local black 	= Color.new(0, 0, 0)
+white 	= Color.new(255, 255, 255)
+black 	= Color.new(0, 0, 0)
 
-local yellow 	= Color.new(255, 255, 0)
-local red 		= Color.new(255, 0, 0)
-local green 	= Color.new(0, 255, 0)
-local blue 		= Color.new(0, 0, 255)
+yellow 	= Color.new(255, 255, 0)
+red 	= Color.new(255, 0, 0)
+green 	= Color.new(0, 255, 0)
+blue 	= Color.new(0, 0, 255)
 
-local orange	= Color.new(255, 128, 0)
-local seablue	= Color.new(0, 255, 255)
-local purple	= Color.new(255, 0, 255)
+orange	= Color.new(255, 128, 0)
+seablue	= Color.new(0, 255, 255)
+purple	= Color.new(255, 0, 255)
 
 
 -- vars
@@ -99,7 +101,8 @@ function draw()
 	-- background
 	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, black)
 	
-	Graphics.debugPrint(500, 30, game.fps, red)
+	-- Graphics.debugPrint(500, 30, game.fps, red)
+	Graphics.debugPrint(550, 30, game.state, red)
 	Graphics.debugPrint(500, 90, score, red)
 	
 	-- local i = 0
@@ -416,69 +419,6 @@ function game_start()
 	
 	game.last_tick = 0 -- drop ticks
 	Timer.reset(game.start) -- restart game timer
-end
-
--- determ distance between two points
-function distance(x1,y1,x2,y2)
-	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
-end
-
--- read user_input
-opad = SCE_CTRL_RTRIGGER
-function user_input()
-	local pad = Controls.read()
-	
-	if Controls.check(pad, SCE_CTRL_TRIANGLE) and not Controls.check(opad, SCE_CTRL_TRIANGLE) then
-	
-size_x = size_x + 1
- 
-	elseif Controls.check(pad, SCE_CTRL_SQUARE) and not Controls.check(opad, SCE_CTRL_SQUARE) then
-		
-size_y = size_y + 1
-	elseif Controls.check(pad, SCE_CTRL_CROSS) and not Controls.check(opad, SCE_CTRL_CROSS) then
-
-offset_x = offset_x + 1
-
-	elseif Controls.check(pad, SCE_CTRL_CIRCLE) and not Controls.check(opad, SCE_CTRL_CIRCLE) then
-		
-offset_y = offset_y + 1
-	
-	end
-	opad= pad
-	if not user.activated then
-
-		local x, y = Controls.readTouch()
-
-		-- first input only
-		if x ~= nil then
-			user.x = x
-			user.y = y
-			user.state = STATE.EXPANDING
-			user.activated = true
-		end
-	end
-	
-	-- exit
-	if Controls.check(pad, SCE_CTRL_SELECT) then
-		clean_exit()
-	end
-end
-
--- main function
-function main()
-	
-	if game.state == 0 then
-		-- loading screen
-		-- menu
-		dofile("app0:/menu.lua")
-		
-	elseif game.state == 1 then
-		-- game start
-	end
-	
-	-- initiate game variables
-	game_start()
-	
 	local timestep = 1000/60 -- 60 fps target
 	local delta = 0
 	local start = Timer.new()
@@ -529,7 +469,82 @@ function main()
 			
 		--end
 	end
+end
+
+-- determ distance between two points
+function distance(x1,y1,x2,y2)
+	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
+end
+
+-- read user_input
+opad = SCE_CTRL_RTRIGGER
+function user_input()
+	local pad = Controls.read()
 	
+	if Controls.check(pad, SCE_CTRL_TRIANGLE) and not Controls.check(opad, SCE_CTRL_TRIANGLE) then
+	
+size_x = size_x + 1
+ 
+	elseif Controls.check(pad, SCE_CTRL_SQUARE) and not Controls.check(opad, SCE_CTRL_SQUARE) then
+		
+size_y = size_y + 1
+	elseif Controls.check(pad, SCE_CTRL_CROSS) and not Controls.check(opad, SCE_CTRL_CROSS) then
+
+offset_x = offset_x + 1
+
+	elseif Controls.check(pad, SCE_CTRL_CIRCLE) and not Controls.check(opad, SCE_CTRL_CIRCLE) then
+		
+offset_y = offset_y + 1
+	
+	end
+	opad = pad
+	if not user.activated then
+
+		local x, y = Controls.readTouch()
+
+		-- first input only
+		if x ~= nil then
+			user.x = x
+			user.y = y
+			user.state = STATE.EXPANDING
+			user.activated = true
+		end
+	end
+	
+	-- exit
+	if Controls.check(pad, SCE_CTRL_SELECT) then
+		clean_exit()
+	end
+end
+
+-- main function
+function main()
+	
+	-- try to get out, I dare you.
+	while true do
+		if game.state == MENU.MENU then
+			-- loading screen
+			-- menu
+			-- adapts game.state
+			dofile("app0:/menu.lua")
+			
+		elseif game.state == MENU.START then
+			-- game start
+			game_start()
+		
+		elseif game.state == MENU.HELP then
+			-- help returns to game.state = 0
+			dofile("app0:/help.lua")
+			
+		elseif game.state == MENU.EXIT then
+			-- exit
+			clean_exit()
+		end	
+	end
+	
+	-- end of execution
+	-- fuck restarting the goddamn app.
+	clean_exit()
 end
 
 size_x = 70
@@ -557,10 +572,22 @@ function sfx_ending(x, y, transition, state)
 	-- Graphics.debugPrint(50, 110, "offset_x" .. offset_x, red)
 	-- Graphics.debugPrint(50, 140, "offset_y" .. offset_y, red)
 	-- left to right animations
-	--if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
+	if transition == SFX.RED_TO_YELLOW or transition == SFX.GREEN_TO_BLUE or transition == SFX.PURPLE_TO_ORANGE then
 		
 		-- Graphics.drawPartialImage(x-move_x, y-move_y, sfx, offset_x+(state*size_x), offset_y+(transition*size_y), size_x, size_y, Color.new(255,255,255,150))
-		Graphics.drawImageExtended(x, y, sfx, offset_x+(state*size_x), offset_y+(transition*size_y), size_x, size_y, 0, 1+(state*3/10), 1+(state*3/10), Color.new(255,255,255,150-(state*10)))
+		Graphics.drawImageExtended(
+								x, -- draw position
+								y, 
+								img_sfx, -- images
+								offset_x+(state*size_x),  -- image start
+								offset_y+(transition*size_y), 
+								size_x,  -- dimensions
+								size_y, 
+								0, 		-- rotation
+								1+(state*4/10),  -- scale, increase every step (explode)
+								1+(state*4/10), 
+								Color.new(255,255,255,150-(state*10)) -- increase alpha
+								)
 		
 	-- right to left animations
 	--elseif transition == SFX.YELLOW_TO_RED or transition == SFX.BLUE_TO_GREEN or transition == SFX.ORANGE_TO_PURPLE then
@@ -577,7 +604,7 @@ end
 function clean_exit()
 
 	-- free images
-	Graphics.freeImage(sfx)
+	Graphics.freeImage(img_sfx)
 	
 	-- close music files
 	-- Sound.close(snd_background)
