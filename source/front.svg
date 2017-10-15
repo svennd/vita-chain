@@ -15,7 +15,10 @@
    version="1.1"
    id="svg926"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="front.svg">
+   sodipodi:docname="front.svg"
+   inkscape:export-filename="C:\Users\svenn\Desktop\vita-tetronimo\vita-chain\sce_sys\livearea\contents\startup.png"
+   inkscape:export-xdpi="44.27"
+   inkscape:export-ydpi="44.27">
   <defs
      id="defs920" />
   <sodipodi:namedview
@@ -26,16 +29,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="68.000607"
+     inkscape:cx="-271.41065"
      inkscape:cy="844.92394"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="958"
-     inkscape:window-height="1018"
-     inkscape:window-x="-7"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata923">
     <rdf:RDF>
@@ -80,7 +83,7 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="86.060783"
-       y="83.718918"
+       y="67.843903"
        id="text1479"
        inkscape:export-filename="C:\Users\svenn\Desktop\vita-tetronimo\vita-chain\sce_sys\livearea\contents\startup.png"
        inkscape:export-xdpi="44.27"
@@ -88,7 +91,7 @@
          sodipodi:role="line"
          id="tspan1477"
          x="86.060783"
-         y="83.718918"
+         y="67.843903"
          style="font-size:16.93333244px;opacity:0.75;fill:#b92d1a;fill-opacity:0.30150757;stroke-width:0.26458332">by SvennD</tspan></text>
   </g>
 </svg>
