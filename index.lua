@@ -52,7 +52,7 @@ ATOM = {
 			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.7, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
 			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.5, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
-game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, loser = false, succes = false, delay_win = 0}
+game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, level_box = false, loser = false, succes = false, delay_win = 0}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
 MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 100 }
@@ -151,8 +151,8 @@ function draw()
 	-- draw animation before leaving view for ever
 	draw_animation()
 	
-	-- if lost
-	draw_loser()
+	-- if lost or at beginning
+	draw_info()
 	
 	-- Terminating drawing phase
 	Graphics.termBlend()
@@ -183,34 +183,36 @@ function draw_interface()
 	end
 end
 
--- draw loser
-function draw_loser()
+-- draw infoscreen
+function draw_info()
 	-- poor kid
-	if not game.loser then
-		return false
+	if game.loser then	
+		-- red background
+		Graphics.fillRect(289, 620, 100, 400, Color.new(255, 0, 0, 200))
+		
+		-- GAME OVER
+		Font.setPixelSizes(main_font, 36)
+		Font.print(main_font, 335, 110, "GAME OVER", black)
+		
+		-- divider
+		Graphics.fillRect(310, 600, 160, 165, black)
+		
+		-- RETRY LEVEL
+		-- background
+		Graphics.fillRect(310, 600, 190, 260, black)
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 340, 205, "RETRY LEVEL", white)
+		
+		-- TO MENNU
+		-- background
+		Graphics.fillRect(310, 600, 300, 370, black)
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 390, 320, "GIVE UP", white)
 	end
 	
-	-- red background
-	Graphics.fillRect(289, 620, 100, 400, Color.new(255, 0, 0, 200))
-	
-	-- GAME OVER
-	Font.setPixelSizes(main_font, 36)
-	Font.print(main_font, 335, 110, "GAME OVER", black)
-	
-	-- divider
-	Graphics.fillRect(310, 600, 160, 165, black)
-	
-	-- RETRY LEVEL
-	-- background
-	Graphics.fillRect(310, 600, 190, 260, black)
-	Font.setPixelSizes(main_font, 26)
-	Font.print(main_font, 340, 205, "RETRY LEVEL", white)
-	
-	-- TO MENNU
-	-- background
-	Graphics.fillRect(310, 600, 300, 370, black)
-	Font.setPixelSizes(main_font, 26)
-	Font.print(main_font, 390, 320, "GIVE UP", white)
+	if game.level_box
+		-- draw level box
+	end
 end
 
 -- draw user
@@ -259,9 +261,9 @@ function draw_field()
 	
 	-- bg
 	if game.succes then
-		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 255, 0, 75))
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 255, 0, 50))
 	else
-		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(255, 255, 255, 75))
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 0, 0, 50))
 	end
 	
 	-- the borders
