@@ -53,7 +53,7 @@ ATOM = {
 			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
 game = {state = 0, fps = 60, step = 10, level = 1, loser = false, succes = false, delay_win = 0}
-user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
+user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
 MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 500 }
 score = 0
@@ -174,9 +174,9 @@ function draw_interface()
 	
 	-- atom count
 	if game.succes then
-		Font.print(main_font, 300, 511,  .. "/" .. (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", green)
+		Font.print(main_font, 300, 511, (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", green)
 	else
-		Font.print(main_font, 300, 511,  .. "/" .. (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", white)
+		Font.print(main_font, 300, 511, (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", white)
 	end
 end
 
@@ -349,17 +349,13 @@ function check_level_finished()
 	if level(game.level, LEVEL.VERIFY) then
 		-- oke next level nothing going on anymore
 		-- delay win for slowing down game after last animation
-		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and delay_win > 100 then
-			atoms = {}
-			game.level = game.level + 1 
+		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and game.delay_win > 1000 then
+			reset_game(game.level + 1)
 			level(game.level, LEVEL.START)
-			user.activated = false
-			game.succes = false
-			game.delay_win = 0
 		else
 			-- succes 
 			game.succes = true
-			game.delay_win = delay_win + 1
+			game.delay_win = game.delay_win + 1
 		end
 	else
 		-- in case of failed
@@ -607,8 +603,11 @@ end
 function reset_game(level)
 	atoms = {}
 	atom_count = {total = 0, init = 0, expanding = 0, explode = 0, merged = 0}
-	user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
-
+	user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
+	game.level = level
+	game.loser = false
+	game.succes = false
+	game.delay_win = 0 -- should be 0 
 end
 
 -- read user_input
@@ -637,7 +636,7 @@ function user_input()
 					reset_game(game.level)
 				elseif y > 300 and y < 370 then
 					-- back to menu
-					reset_game()
+					reset_game(1)
 					break_game_loop = true
 					game.state = MENU.MENU
 				end
