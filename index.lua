@@ -45,17 +45,17 @@ atom_count = {total = 0, init = 0, expanding = 0, explode = 0, merged = 0}
 -- atom states
 STATE = {INIT = 1, EXPANDING = 2, EXPLODE = 3, MERGED = 4}
 ATOM = {
-			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 4, FX = SFX.RED_TO_YELLOW, SCORE = 10}, 
-			{NAME = "HELIUM", SIZE = 7, COLOR = red, EXPAND = 3, FX = SFX.YELLOW_TO_RED, SCORE = 15},  
-			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 1.7, FX = SFX.BLUE_TO_GREEN, SCORE = 25}, 
-			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 1.5, FX = SFX.GREEN_TO_BLUE, SCORE = 35},  
-			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.15, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
-			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
+			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 5, FX = SFX.RED_TO_YELLOW, SCORE = 10}, 
+			{NAME = "HELIUM", SIZE = 7, COLOR = red, EXPAND = 4, FX = SFX.YELLOW_TO_RED, SCORE = 15},  
+			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 3.5, FX = SFX.BLUE_TO_GREEN, SCORE = 25}, 
+			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 2, FX = SFX.GREEN_TO_BLUE, SCORE = 35},  
+			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.7, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
+			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.5, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
-game = {state = 0, fps = 60, step = 10, level = 1, loser = false, succes = false, delay_win = 0}
+game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, loser = false, succes = false, delay_win = 0}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
 MAX_EXPAND = 3
-animation = { implode_start = 100, user_implode = 500 }
+animation = { implode_start = 100, user_implode = 100 }
 score = 0
 break_game_loop = false 
 
@@ -99,9 +99,9 @@ function populate_atoms(n, max_atom)
 		
 		-- dx, dy = 1-3% of the field per step
 		atoms[atom_id] = {
-							name = ATOM[selected_atom].NAME, 
-							neutrons = ATOM[selected_atom].SIZE, 
-							color = ATOM[selected_atom].COLOR, 
+							id = selected_atom, 
+							neutrons = ATOM[selected_atom].SIZE, -- can be removed
+							color = ATOM[selected_atom].COLOR,  -- can be removed
 							x = math.random(30, FIELD.WIDTH-30), 
 							y = math.random(30, FIELD.HEIGHT-30),
 							dx = FIELD.WIDTH / math.random(5, 15) * random_direction(),
@@ -109,9 +109,9 @@ function populate_atoms(n, max_atom)
 							state = STATE.INIT,
 							expand = 1,
 							implode = 0,
-							score = ATOM[selected_atom].SCORE,
+							score = ATOM[selected_atom].SCORE, -- can be removed
 							animated = 0,
-							fx = ATOM[selected_atom].FX
+							fx = ATOM[selected_atom].FX -- can be removed
 						}
 		atom_id = atom_id + 1 
 	end
@@ -151,6 +151,9 @@ function draw()
 	-- draw animation before leaving view for ever
 	draw_animation()
 	
+	-- if lost
+	draw_loser()
+	
 	-- Terminating drawing phase
 	Graphics.termBlend()
 	Screen.flip()
@@ -182,30 +185,32 @@ end
 
 -- draw loser
 function draw_loser()
-		-- poor kid
-	if game.loser then
-		-- red background
-		Graphics.fillRect(289, 620, 100, 420, Color.new(255, 0, 0, 150))
-		
-		-- GAME OVER
-		Font.setPixelSizes(main_font, 36)
-		Font.print(main_font, 315, 110, "GAME OVER", black)
-		
-		-- divider
-		Graphics.fillRect(310, 600, 160, 165, black)
-		
-		-- RETRY LEVEL
-		-- background
-		Graphics.fillRect(300, 595, 190, 260, black)
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 323, 212, "RETRY LEVEL", white)
-		
-		-- TO MENNU
-		-- background
-		Graphics.fillRect(300, 595, 300, 370, black)
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 360, 320, "GIVE UP", white)
+	-- poor kid
+	if not game.loser then
+		return false
 	end
+	
+	-- red background
+	Graphics.fillRect(289, 620, 100, 400, Color.new(255, 0, 0, 200))
+	
+	-- GAME OVER
+	Font.setPixelSizes(main_font, 36)
+	Font.print(main_font, 335, 110, "GAME OVER", black)
+	
+	-- divider
+	Graphics.fillRect(310, 600, 160, 165, black)
+	
+	-- RETRY LEVEL
+	-- background
+	Graphics.fillRect(310, 600, 190, 260, black)
+	Font.setPixelSizes(main_font, 26)
+	Font.print(main_font, 340, 205, "RETRY LEVEL", white)
+	
+	-- TO MENNU
+	-- background
+	Graphics.fillRect(310, 600, 300, 370, black)
+	Font.setPixelSizes(main_font, 26)
+	Font.print(main_font, 390, 320, "GIVE UP", white)
 end
 
 -- draw user
@@ -251,7 +256,15 @@ end
 
 -- ui + field
 function draw_field()
-	-- the backfield
+	
+	-- bg
+	if game.succes then
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 255, 0, 75))
+	else
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(255, 255, 255, 75))
+	end
+	
+	-- the borders
 	draw_box(10, FIELD.WIDTH, 10, FIELD.HEIGHT, 10, black)
 	
 	-- level
@@ -341,7 +354,8 @@ end
 function check_level_finished()
 	
 	-- user not yet shot then we cant be finished yet
-	if not user.activated then
+	-- or user is already lost
+	if not user.activated or game.loser then
 		return false
 	end
 	
@@ -349,7 +363,7 @@ function check_level_finished()
 	if level(game.level, LEVEL.VERIFY) then
 		-- oke next level nothing going on anymore
 		-- delay win for slowing down game after last animation
-		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and game.delay_win > 1000 then
+		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and game.delay_win > 100 then
 			reset_game(game.level + 1)
 			level(game.level, LEVEL.START)
 		else
@@ -446,12 +460,13 @@ function expand_atoms(delta)
 	local count_atoms = #atoms
 	
 	while i < count_atoms do
+		local c_atom = atoms[i]
 		-- only for expanding
-		if atoms[i].state == STATE.EXPANDING then
-			if atoms[i].expand < MAX_EXPAND then
-				atoms[i].expand = atoms[i].expand + (delta*3)
+		if c_atom.state == STATE.EXPANDING then
+			if c_atom.expand < ATOM[c_atom.id].EXPAND then
+				c_atom.expand = c_atom.expand + (delta*3)
 			else
-				atoms[i].state = STATE.EXPLODE
+				c_atom.state = STATE.EXPLODE
 			end
 		end
 		i = i + 1
@@ -504,14 +519,15 @@ function move_atoms(delta)
 	local i = 0
 	local count_atoms = #atoms
 	while i < count_atoms do
-	
+		local c_atom = atoms[i]
 		-- only move when no reaction has happened
-		if atoms[i].state == STATE.INIT then
+		if c_atom.state == STATE.INIT then
 			-- current location
-			local current_x = atoms[i].x
-			local current_y = atoms[i].y
-			local dir_x = atoms[i].dx
-			local dir_y = atoms[i].dy
+			local current_x = c_atom.x
+			local current_y = c_atom.y
+			local dir_x = c_atom.dx
+			local dir_y = c_atom.dy
+			local atom_size = ATOM[c_atom.id].SIZE
 			
 			-- determ new location
 			local new_x = current_x + dir_x*delta --this should take into account the time passed
@@ -520,18 +536,18 @@ function move_atoms(delta)
 			-- check if the atom does not hit the boundry
 			-- if it does switch direction
 			-- 20 = field border + field offset
-			if new_x-atoms[i].neutrons < 20 or new_x+atoms[i].neutrons > FIELD.WIDTH then
+			if new_x-atom_size < 20 or new_x+atom_size > FIELD.WIDTH then
 				dir_x = -dir_x
 			end
 			
-			if new_y-atoms[i].neutrons < 20 or new_y+atoms[i].neutrons > FIELD.HEIGHT then
+			if new_y-atom_size < 20 or new_y+atom_size > FIELD.HEIGHT then
 				dir_y = -dir_y
 			end
 			
-			atoms[i].x = new_x
-			atoms[i].y = new_y
-			atoms[i].dx = dir_x
-			atoms[i].dy = dir_y
+			c_atom.x = new_x
+			c_atom.y = new_y
+			c_atom.dx = dir_x
+			c_atom.dy = dir_y
 		end
 		i = i + 1
 	end
@@ -589,6 +605,7 @@ function game_start()
 		
 		-- if we need to go to menu
 		if break_game_loop then
+			break_game_loop = false
 			break
 		end
 	end
@@ -614,9 +631,11 @@ end
 function user_input()
 
 	local x, y = Controls.readTouch()
-
+	local now = Timer.getTime(game.play)
+	local dt = now - game.last_input 
+	
 	-- first input only
-	if x ~= nil then
+	if dt > 100 and x ~= nil then
 	
 		-- ingame
 		if not user.activated then
@@ -634,6 +653,8 @@ function user_input()
 				if y > 190 and y < 260 then
 					-- retry level
 					reset_game(game.level)
+					level(game.level, LEVEL.START)
+					game.last_input = now
 				elseif y > 300 and y < 370 then
 					-- back to menu
 					reset_game(1)
