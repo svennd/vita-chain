@@ -12,7 +12,7 @@ VERSION = "0.1"
 FIELD = {WIDTH = 700, HEIGHT = 400}
 SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
 MENU = {MENU = 0, START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
-LEVEL = {START = 1, VERIFY = 2, REQUIREMENT = {3, 5, 10, 15}}
+LEVEL = {START = 1, VERIFY = 2, REQUIREMENT = {}, ATOMS = {}, ENTROPY = {}}
 
 -- loads
 img_sfx = Graphics.loadImage("app0:/assets/sfx.png")
@@ -58,17 +58,17 @@ MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 500 }
 score = 0
 
+-- wrapper to populate level global
+function add_level(lvl_req, lvl_atom, lvl_entropy)
+	table.insert(LEVEL.REQUIREMENT, lvl_req)
+	table.insert(LEVEL.ATOMS, lvl_atom)
+	table.insert(LEVEL.ENTROPY, lvl_entropy)
+end
+
+-- level state
 function level(n, step)
 	if step == LEVEL.START then
-		if n == 1 then
-			populate_atoms(10, 3)
-		elseif n == 2 then
-			populate_atoms(15, 3)
-		elseif n == 3 then
-			populate_atoms(25, 3)
-		elseif n == 4 then
-			populate_atoms(35, 3)
-		end
+		populate_atoms(LEVEL.ATOMS[n], LEVEL.ENTROPY[n])
 	elseif step == LEVEL.VERIFY then
 		return target_get(LEVEL.REQUIREMENT[n])
 	end
@@ -76,7 +76,7 @@ end
 
 -- can be more complex
 function target_get(n)
-	if atom_count.merged >= n then
+	if (atom_count.merged + atom_count.explode) >= n then
 		return true
 	else
 		return false
@@ -138,6 +138,24 @@ function draw()
 	-- draw field
 	draw_field()
 	
+	-- ui
+	draw_interface()
+	
+	-- draw user activation
+	draw_user()
+	
+	-- draw atoms
+	draw_atoms()
+	
+	-- draw animation before leaving view for ever
+	draw_animation()
+	
+	-- Terminating drawing phase
+	Graphics.termBlend()
+	Screen.flip()
+end
+
+function draw_interface()
 	-- score
 	Font.setPixelSizes(main_font, 20)
 	if game.succes then
@@ -155,23 +173,10 @@ function draw()
 	
 	-- atom count
 	if game.succes then
-		Font.print(main_font, 300, 511, LEVEL.REQUIREMENT[game.level] .. "/" .. atom_count.merged .. " " .. atom_count.total, green)
+		Font.print(main_font, 300, 511,  .. "/" .. (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", green)
 	else
-		Font.print(main_font, 300, 511, LEVEL.REQUIREMENT[game.level] .. "/" .. atom_count.merged .. " " .. atom_count.total, white)
+		Font.print(main_font, 300, 511,  .. "/" .. (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", white)
 	end
-	
-	-- draw user activation
-	draw_user()
-	
-	-- draw atoms
-	draw_atoms()
-	
-	-- draw animation before leaving view for ever
-	draw_animation()
-	
-	-- Terminating drawing phase
-	Graphics.termBlend()
-	Screen.flip()
 end
 
 -- draw loser
@@ -598,8 +603,38 @@ function user_input()
 	-- end
 end
 
+function load_levels()
+	-- level 1-5
+	add_level(1, 5, 3) -- 20%
+	add_level(2, 10, 3) -- 20%
+	add_level(4, 15, 3) -- 26%
+	add_level(4, 15, 4) -- 26% -- complexity
+	add_level(6, 20, 3) -- 30%
+	
+	-- level 6-10
+	add_level(7, 20, 4) -- 35%
+	add_level(7, 25, 5) -- 28%-- complexity
+	add_level(10, 25, 4) -- 40%
+	add_level(10, 25, 5) -- 40%
+	add_level(15, 30, 4) -- 50%
+	
+	-- level 11-15
+	add_level(20, 35, 4) -- 57%
+	add_level(26, 40, 4) -- 65%
+	add_level(26, 40, 5) -- 65%
+	add_level(30, 45, 6) -- 66%
+	add_level(38, 50, 5) -- 76%
+	
+	-- level 16-
+	add_level(38, 50, 6) -- 76%
+	add_level(43, 53, 6) -- 81%
+	add_level(48, 55, 6) -- 87%
+end
+
 -- main function
 function main()
+	-- during loading screen
+	load_levels()
 	
 	-- try to get out, I dare you.
 	while true do
