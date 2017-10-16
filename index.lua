@@ -52,11 +52,12 @@ ATOM = {
 			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.15, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
 			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.07, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
-game = {state = 0, fps = 60, start = Timer.new(), last_tick = 0, step = 10, level = 1, loser = false, succes = false}
+game = {state = 0, fps = 60, step = 10, level = 1, loser = false, succes = false, delay_win = 0}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
 MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 500 }
 score = 0
+break_game_loop = false 
 
 -- wrapper to populate level global
 function add_level(lvl_req, lvl_atom, lvl_entropy)
@@ -181,10 +182,29 @@ end
 
 -- draw loser
 function draw_loser()
-	
-	-- poor kid
+		-- poor kid
 	if game.loser then
-		Graphics.fillRect(300, 600, 110, 600, red)	
+		-- red background
+		Graphics.fillRect(289, 620, 100, 420, Color.new(255, 0, 0, 150))
+		
+		-- GAME OVER
+		Font.setPixelSizes(main_font, 36)
+		Font.print(main_font, 315, 110, "GAME OVER", black)
+		
+		-- divider
+		Graphics.fillRect(310, 600, 160, 165, black)
+		
+		-- RETRY LEVEL
+		-- background
+		Graphics.fillRect(300, 595, 190, 260, black)
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 323, 212, "RETRY LEVEL", white)
+		
+		-- TO MENNU
+		-- background
+		Graphics.fillRect(300, 595, 300, 370, black)
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 360, 320, "GIVE UP", white)
 	end
 end
 
@@ -328,22 +348,24 @@ function check_level_finished()
 	-- if succesfull finished level up!
 	if level(game.level, LEVEL.VERIFY) then
 		-- oke next level nothing going on anymore
-		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 then
+		-- delay win for slowing down game after last animation
+		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and delay_win > 100 then
 			atoms = {}
 			game.level = game.level + 1 
 			level(game.level, LEVEL.START)
 			user.activated = false
 			game.succes = false
+			game.delay_win = 0
 		else
 			-- succes 
 			game.succes = true
+			game.delay_win = delay_win + 1
 		end
 	else
 		-- in case of failed
 			-- user has been shot
 			-- no expanding no exploding (merged or init left)
 		if user.state == STATE.MERGED and atom_count.expanding == 0 and atom_count.explode == 0 then
-			atoms = {}
 			game.loser = true
 		end
 		
@@ -520,16 +542,16 @@ function move_atoms(delta)
 end
 
 function game_start()
-	level(game.level, LEVEL.START)
 	
-	game.last_tick = 0 -- drop ticks
-	Timer.reset(game.start) -- restart game timer
 	local timestep = 1000/60 -- 60 fps target
 	local delta = 0
 	local start = Timer.new()
 	local last_frame = 0
 	local fps_second = 0
 	local fps_update = 0
+	
+	-- set first level
+	level(game.level, LEVEL.START)
 	
 	-- loop
 	while true do
@@ -568,6 +590,11 @@ function game_start()
 		-- draw game
 		draw()
 		fps_second = fps_second + 1
+		
+		-- if we need to go to menu
+		if break_game_loop then
+			break
+		end
 	end
 end
 
@@ -576,17 +603,24 @@ function distance(x1,y1,x2,y2)
 	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
 end
 
+-- reset game
+function reset_game(level)
+	atoms = {}
+	atom_count = {total = 0, init = 0, expanding = 0, explode = 0, merged = 0}
+	user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, tick = 0, activated = false, implode = 0}
+
+end
+
 -- read user_input
 function user_input()
-	if not user.activated then
 
-		local x, y = Controls.readTouch()
+	local x, y = Controls.readTouch()
 
-		-- FIELD = {WIDTH = 700, HEIGHT = 400}
-
-		-- first input only
-		if x ~= nil then
-		
+	-- first input only
+	if x ~= nil then
+	
+		-- ingame
+		if not user.activated then
 			-- within field
 			if x < FIELD.WIDTH and y < FIELD.HEIGHT then
 				user.x = x
@@ -595,12 +629,27 @@ function user_input()
 				user.activated = true
 			end
 		end
+		
+		if game.loser then
+			if x > 300 and x < 595 then
+				if y > 190 and y < 260 then
+					-- retry level
+					reset_game(game.level)
+				elseif y > 300 and y < 370 then
+					-- back to menu
+					reset_game()
+					break_game_loop = true
+					game.state = MENU.MENU
+				end
+			end
+		end
 	end
 	
-	-- exit
-	-- if Controls.check(pad, SCE_CTRL_SELECT) then
-		-- clean_exit()
-	-- end
+	-- emergency exit
+	local pad = Controls.read()
+	if Controls.check(pad, SCE_CTRL_SELECT) then
+		clean_exit()
+	end
 end
 
 function load_levels()
@@ -740,11 +789,6 @@ function clean_exit()
 	-- kill app
 	System.exit()
 	
-end
-
--- debug_file = System.openFile("ux0:/data/chain_debug", FWRITE)
-function debug_log(msg)
-	System.writeFile(debug_file, msg, string.len(msg))
 end
 
 -- run the code
