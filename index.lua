@@ -60,11 +60,11 @@ score = 0
 break_game_loop = false 
 
 -- wrapper to populate level global
-function add_level(lvl_req, lvl_atom, lvl_entropy)
+function add_level(lvl_req, lvl_atom, lvl_entropy, lvl_text)
 	table.insert(LEVEL.REQUIREMENT, lvl_req)
 	table.insert(LEVEL.ATOMS, lvl_atom)
 	table.insert(LEVEL.ENTROPY, lvl_entropy)
-	table.insert(LEVEL.ENTROPY, lvl_entropy)
+	table.insert(LEVEL.TEXT, lvl_text)
 end
 
 -- level state
@@ -163,7 +163,7 @@ end
 
 function draw_interface()
 	-- score
-	Font.setPixelSizes(main_font, 20)
+	Font.setPixelSizes(main_font, 22)
 	if game.succes then
 		Font.print(main_font, 806, 511, score, green)
 	else
@@ -172,9 +172,9 @@ function draw_interface()
 	
 	-- level
 	if game.succes then
-		Font.print(main_font, 50, 511, game.level, green)
+		Font.print(main_font, 50, 511, "LEVEL" .. game.level, green)
 	else
-		Font.print(main_font, 50, 511, game.level, white)
+		Font.print(main_font, 50, 511, "LEVEL" .. game.level, white)
 	end
 	
 	-- atom count
@@ -212,7 +212,7 @@ function draw_info()
 		Font.print(main_font, 390, 320, "GIVE UP", white)
 	end
 	
-	if game.level_box
+	if game.level_box then
 		-- draw level box (green)
 		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
 		
@@ -230,7 +230,7 @@ function draw_info()
 		-- ok button
 		Graphics.fillRect(310, 600, 300, 370, black)
 		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 390, 320, "OK", white)
+		Font.print(main_font, 430, 320, "OK", white)
 		
 	end
 end
@@ -281,7 +281,7 @@ function draw_field()
 	
 	-- bg
 	if game.succes then
-		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 255, 0, 50))
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 150, 0, 50))
 	else
 		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 0, 0, 50))
 	end
@@ -706,14 +706,14 @@ end
 
 function load_levels()
 	-- level 1-5
-	add_level(1, 5, 3, "Get you're first explosion going !\nGET 1 out of 5") -- 20%
+	add_level(1, 5, 3, "Get you're first \nexplosion going !\nGET 1 out of 5") -- 20%
 	add_level(2, 10, 3, "Too easy !\nGET 2 out of 10") -- 20%
-	add_level(4, 15, 3, "Still here ? Now we get real !\nGET 4 out of 15") -- 26%
-	add_level(4, 15, 4, "Watch out, blue ones are smaller then others!\nGET 4 out of 15") -- 26% -- complexity
-	add_level(6, 20, 3, "Still not hard, let's add more !\nGET 6 out of 20") -- 30%
+	add_level(4, 15, 3, "Still here ? Now we \nget real !\nGET 4 out of 15") -- 26%
+	add_level(4, 15, 4, "Watch out, blue ones\nare smaller then others!\nGET 4 out of 15") -- 26% -- complexity
+	add_level(6, 20, 3, "Still not hard,\nlet's add more !\nGET 6 out of 20") -- 30%
 	
 	-- level 6-10
-	add_level(7, 20, 4, "The blue ones are back.\nGET 7 out of 20") -- 35%
+	add_level(7, 20, 4, "The blue ones\nare back.\nGET 7 out of 20") -- 35%
 	add_level(7, 25, 5, "Purple ones !\nGET 7 out of 25") -- 28%-- complexity
 	add_level(10, 25, 4, "Increase and repeat.\n10 out of 25") -- 40%
 	add_level(10, 25, 5, "bad_pun.exe not found.\nGET 10 out of 25") -- 40%
