@@ -58,6 +58,7 @@ MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 100 }
 score = 0
 break_game_loop = false 
+game_finish = false
 
 -- wrapper to populate level global
 function add_level(lvl_req, lvl_atom, lvl_entropy, lvl_text)
@@ -70,8 +71,17 @@ end
 -- level state
 function level(n, step)
 	if step == LEVEL.START then
-		game.level_box = true
-		populate_atoms(LEVEL.ATOMS[n], LEVEL.ENTROPY[n])
+		-- check to see if we still have levels
+		if LEVEL.ATOMS[n] == nil then
+			-- do subroutine end_game
+			game_finish = true
+			game.level = 1
+			populate_atoms(LEVEL.ATOMS[1], LEVEL.ENTROPY[1])
+		else
+			-- next level
+			game.level_box = true
+			populate_atoms(LEVEL.ATOMS[n], LEVEL.ENTROPY[n])
+		end
 	elseif step == LEVEL.VERIFY then
 		return target_get(LEVEL.REQUIREMENT[n])
 	end
@@ -213,6 +223,29 @@ function draw_info()
 	end
 	
 	if game.level_box then
+		-- draw level box (green)
+		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
+		
+		-- 
+		Font.setPixelSizes(main_font, 36)
+		Font.print(main_font, 335, 110, "LEVEL " .. game.level, black)
+		
+		-- divider
+		Graphics.fillRect(310, 600, 160, 165, black)
+		
+		-- level text
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 320, 190, LEVEL.TEXT[game.level], white)
+		
+		-- ok button
+		Graphics.fillRect(310, 600, 300, 370, black)
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 430, 320, "OK", white)
+		
+	end
+	
+	-- game finished
+	if game_finish then
 		-- draw level box (green)
 		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
 		
@@ -716,20 +749,24 @@ function load_levels()
 	add_level(7, 20, 4, "The blue ones\nare back.\nGET 7 out of 20") -- 35%
 	add_level(7, 25, 5, "Purple ones !\nGET 7 out of 25") -- 28%-- complexity
 	add_level(10, 25, 4, "Increase and repeat.\n10 out of 25") -- 40%
-	add_level(10, 25, 5, "bad_pun.exe not found.\nGET 10 out of 25") -- 40%
-	add_level(15, 30, 4) -- 50%
+	add_level(10, 25, 5, "bad_pun.exe\nnot found.\nGET 10 out of 25") -- 40%
+	add_level(15, 30, 4, "is this\nthe end?\nGET 15 out of 30") -- 50%
 	
 	-- level 11-15
-	add_level(20, 35, 4) -- 57%
-	add_level(26, 40, 4) -- 65%
-	add_level(26, 40, 5) -- 65%
-	add_level(30, 45, 6) -- 66%
-	add_level(38, 50, 5) -- 76%
+	add_level(20, 35, 4, "gota catch\n'm all?\nGET20 out of 30") -- 57%
+	add_level(26, 40, 4, "this is crazy\nGET26 out of 40") -- 65%
+	add_level(26, 40, 5, "ready for the\nsecret msg?\nGET26 out of 40") -- 65%
+	add_level(22, 40, 6, "the message is\nGET26out of 40") -- 65%
+	add_level(35, 40, 6, "impossible is\njust an opinion\nGET 35 out of 40")
+	
+	-- after this perfomance is laggy
+	-- add_level(30, 45, 6) -- 66%
+	-- add_level(38, 50, 5) -- 76%
 	
 	-- level 16-
-	add_level(38, 50, 6) -- 76%
-	add_level(43, 53, 6) -- 81%
-	add_level(48, 55, 6) -- 87%
+	-- add_level(38, 50, 6) -- 76%
+	-- add_level(43, 53, 6) -- 81%
+	-- add_level(48, 55, 6) -- 87%
 end
 
 -- main function
