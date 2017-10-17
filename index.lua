@@ -12,7 +12,7 @@ VERSION = "0.1"
 FIELD = {WIDTH = 700, HEIGHT = 400}
 SFX = {RED_TO_YELLOW = 1, YELLOW_TO_RED = 2, GREEN_TO_BLUE = 3, BLUE_TO_GREEN = 4, PURPLE_TO_ORANGE = 5, ORANGE_TO_PURPLE = 6}
 MENU = {MENU = 0, START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
-LEVEL = {START = 1, VERIFY = 2, REQUIREMENT = {}, ATOMS = {}, ENTROPY = {}}
+LEVEL = {START = 1, VERIFY = 2, REQUIREMENT = {}, ATOMS = {}, ENTROPY = {}, TEXT = {}}
 
 -- loads
 img_sfx = Graphics.loadImage("app0:/assets/sfx.png")
@@ -47,10 +47,10 @@ STATE = {INIT = 1, EXPANDING = 2, EXPLODE = 3, MERGED = 4}
 ATOM = {
 			{NAME = "HYDROGEN", SIZE = 7, COLOR = yellow, EXPAND = 5, FX = SFX.RED_TO_YELLOW, SCORE = 10}, 
 			{NAME = "HELIUM", SIZE = 7, COLOR = red, EXPAND = 4, FX = SFX.YELLOW_TO_RED, SCORE = 15},  
-			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 3.5, FX = SFX.BLUE_TO_GREEN, SCORE = 25}, 
-			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 2, FX = SFX.GREEN_TO_BLUE, SCORE = 35},  
-			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 1.7, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
-			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 1.5, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
+			{NAME = "LITHIUM", SIZE = 7, COLOR = green, EXPAND = 3.7, FX = SFX.BLUE_TO_GREEN, SCORE = 25}, 
+			{NAME = "BERYLLIUM", SIZE = 7, COLOR = blue, EXPAND = 3, FX = SFX.GREEN_TO_BLUE, SCORE = 35},  
+			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 2.7, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
+			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 2.1, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
 game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, level_box = false, loser = false, succes = false, delay_win = 0}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
@@ -64,11 +64,13 @@ function add_level(lvl_req, lvl_atom, lvl_entropy)
 	table.insert(LEVEL.REQUIREMENT, lvl_req)
 	table.insert(LEVEL.ATOMS, lvl_atom)
 	table.insert(LEVEL.ENTROPY, lvl_entropy)
+	table.insert(LEVEL.ENTROPY, lvl_entropy)
 end
 
 -- level state
 function level(n, step)
 	if step == LEVEL.START then
+		game.level_box = true
 		populate_atoms(LEVEL.ATOMS[n], LEVEL.ENTROPY[n])
 	elseif step == LEVEL.VERIFY then
 		return target_get(LEVEL.REQUIREMENT[n])
@@ -211,7 +213,25 @@ function draw_info()
 	end
 	
 	if game.level_box
-		-- draw level box
+		-- draw level box (green)
+		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
+		
+		-- 
+		Font.setPixelSizes(main_font, 36)
+		Font.print(main_font, 335, 110, "LEVEL " .. game.level, black)
+		
+		-- divider
+		Graphics.fillRect(310, 600, 160, 165, black)
+		
+		-- level text
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 320, 190, LEVEL.TEXT[game.level], white)
+		
+		-- ok button
+		Graphics.fillRect(310, 600, 300, 370, black)
+		Font.setPixelSizes(main_font, 26)
+		Font.print(main_font, 390, 320, "OK", white)
+		
 	end
 end
 
@@ -640,7 +660,7 @@ function user_input()
 	if dt > 100 and x ~= nil then
 	
 		-- ingame
-		if not user.activated then
+		if not user.activated and not game.level_box then
 			-- within field
 			if x < FIELD.WIDTH and y < FIELD.HEIGHT then
 				user.x = x
@@ -650,8 +670,18 @@ function user_input()
 			end
 		end
 		
+		-- level box is active
+		if game.level_box then
+			if x > 310 and x < 600 then
+				if y > 300 and y < 370 then
+					game.level_box = false
+					game.last_input = now
+				end
+			end
+		end
+		
 		if game.loser then
-			if x > 300 and x < 595 then
+			if x > 310 and  x < 600 then
 				if y > 190 and y < 260 then
 					-- retry level
 					reset_game(game.level)
@@ -676,17 +706,17 @@ end
 
 function load_levels()
 	-- level 1-5
-	add_level(1, 5, 3) -- 20%
-	add_level(2, 10, 3) -- 20%
-	add_level(4, 15, 3) -- 26%
-	add_level(4, 15, 4) -- 26% -- complexity
-	add_level(6, 20, 3) -- 30%
+	add_level(1, 5, 3, "Get you're first explosion going !\nGET 1 out of 5") -- 20%
+	add_level(2, 10, 3, "Too easy !\nGET 2 out of 10") -- 20%
+	add_level(4, 15, 3, "Still here ? Now we get real !\nGET 4 out of 15") -- 26%
+	add_level(4, 15, 4, "Watch out, blue ones are smaller then others!\nGET 4 out of 15") -- 26% -- complexity
+	add_level(6, 20, 3, "Still not hard, let's add more !\nGET 6 out of 20") -- 30%
 	
 	-- level 6-10
-	add_level(7, 20, 4) -- 35%
-	add_level(7, 25, 5) -- 28%-- complexity
-	add_level(10, 25, 4) -- 40%
-	add_level(10, 25, 5) -- 40%
+	add_level(7, 20, 4, "The blue ones are back.\nGET 7 out of 20") -- 35%
+	add_level(7, 25, 5, "Purple ones !\nGET 7 out of 25") -- 28%-- complexity
+	add_level(10, 25, 4, "Increase and repeat.\n10 out of 25") -- 40%
+	add_level(10, 25, 5, "bad_pun.exe not found.\nGET 10 out of 25") -- 40%
 	add_level(15, 30, 4) -- 50%
 	
 	-- level 11-15
