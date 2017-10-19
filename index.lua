@@ -52,13 +52,12 @@ ATOM = {
 			{NAME = "BORON", SIZE = 7, COLOR = purple, EXPAND = 2.7, FX = SFX.ORANGE_TO_PURPLE, SCORE = 50},  
 			{NAME = "CARBON", SIZE = 7, COLOR = orange, EXPAND = 2.1, FX = SFX.PURPLE_TO_ORANGE, SCORE = 70}
 		}
-game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, level_box = false, loser = false, succes = false, delay_win = 0}
+game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, level_box = false, loser = false, succes = false, delay_win = 0, finish = false}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
 MAX_EXPAND = 3
 animation = { implode_start = 100, user_implode = 100 }
 score = 0
 break_game_loop = false 
-game_finish = false
 
 -- wrapper to populate level global
 function add_level(lvl_req, lvl_atom, lvl_entropy, lvl_text)
@@ -74,9 +73,7 @@ function level(n, step)
 		-- check to see if we still have levels
 		if LEVEL.ATOMS[n] == nil then
 			-- do subroutine end_game
-			game_finish = true
-			game.level = 1
-			populate_atoms(LEVEL.ATOMS[1], LEVEL.ENTROPY[1])
+			game_over()
 		else
 			-- next level
 			game.level_box = true
@@ -222,20 +219,21 @@ function draw_info()
 		Font.print(main_font, 390, 320, "GIVE UP", white)
 	end
 	
-	if game.level_box then
+	-- game finished
+	if game.finish then
 		-- draw level box (green)
 		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
 		
 		-- 
 		Font.setPixelSizes(main_font, 36)
-		Font.print(main_font, 335, 110, "LEVEL " .. game.level, black)
+		Font.print(main_font, 335, 110, "GAME OVER", black)
 		
 		-- divider
 		Graphics.fillRect(310, 600, 160, 165, black)
 		
 		-- level text
 		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 320, 190, LEVEL.TEXT[game.level], white)
+		Font.print(main_font, 320, 190, "You won !\nWe now start over.", white)
 		
 		-- ok button
 		Graphics.fillRect(310, 600, 300, 370, black)
@@ -244,8 +242,7 @@ function draw_info()
 		
 	end
 	
-	-- game finished
-	if game_finish then
+	if game.level_box then
 		-- draw level box (green)
 		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
 		
@@ -314,9 +311,9 @@ function draw_field()
 	
 	-- bg
 	if game.succes then
-		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 150, 0, 50))
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 150, 0, 10))
 	else
-		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 0, 0, 50))
+		Graphics.fillRect(10, FIELD.WIDTH, 10, FIELD.HEIGHT, Color.new(0, 0, 0, 10))
 	end
 	
 	-- the borders
@@ -682,6 +679,13 @@ function reset_game(level)
 	game.delay_win = 0 -- should be 0 
 end
 
+
+-- game finished
+function game_over()
+	game.finish = true
+	game.level = 1
+end
+
 -- read user_input
 function user_input()
 
@@ -713,6 +717,7 @@ function user_input()
 			end
 		end
 		
+		--lost
 		if game.loser then
 			if x > 310 and  x < 600 then
 				if y > 190 and y < 260 then
@@ -725,6 +730,17 @@ function user_input()
 					reset_game(1)
 					break_game_loop = true
 					game.state = MENU.MENU
+				end
+			end
+		end
+		
+		if game.finish then
+			if x > 310 and  x < 600 then
+				if y > 300 and y < 370 then
+					-- back to menu
+					reset_game(game.level)
+					level(game.level, LEVEL.START)
+					game.finish = false
 				end
 			end
 		end
