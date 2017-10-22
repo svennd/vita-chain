@@ -7,7 +7,6 @@ local img_help = Graphics.loadImage("app0:/assets/help_mechanism.png")
 
 -- menu vars
 local oldpad = SCE_CTRL_RTRIGGER -- input init
-local current_menu = 0 -- menu position
 local return_value = false
 local screen = {current = 1, max = 3}
 local play = Timer.new()
@@ -37,11 +36,7 @@ local function help_draw()
 	if screen.current == 1 then
 		-- text
 		Font.print(main_font, 140, 60, "This game uses the front touch screen of the vita.", white)
-		
-		-- touch tip
-		-- dont hide it completely
-		Graphics.drawImage(140, 100, img_touch, Color.new(255,255,255, 50 + math.floor(animate_touch/3)))
-	
+			
 	elseif screen.current == 2 then
 		Font.print(main_font, 140, 60, "The target of the game is to create a chain reaction.", white)
 		
@@ -72,6 +67,9 @@ local function help_draw()
 		Font.print(main_font, 160, 185, "size : 1.5   score : 70", white)
 		
 	end
+	
+	-- touch tip
+	Graphics.drawImage(140, 100, img_touch, Color.new(255,255,255, 50 + math.floor(animate_touch/3)))
 	
 	Graphics.termBlend()
 	Screen.flip()
