@@ -1,6 +1,8 @@
 # vita-chain
 Creating a chain reaction. It's never been so fun! This is my first touchy-the-fish game for PS Vita that allow homebrew.
 
+<img src='https://github.com/svennd/vita-chain/blob/master/chain_v0.1.png' />
+
 # features
 * touchy the fishy ?
 * levels
@@ -20,6 +22,5 @@ If you wish to 'compile' this game :
 
 # credits
 * [Lua Player Plus Vita](https://github.com/Rinnegatamante/lpp-vita) by [Rinnegatamante](http://rinnegatamante.it)
-* Thanks, Aurora ([@KawaiiAuroraA](https://twitter.com/KawaiiAuroraA)) for testing 
 * [touch icon](https://iconsmind.com)
 * font : [xolonium](https://fontlibrary.org/en/font/xolonium)
