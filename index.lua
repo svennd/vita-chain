@@ -755,7 +755,7 @@ end
 
 function load_levels()
 	-- level 1-5
-	add_level(1, 5, 3, "Get you're first \nexplosion going !\nGET 1 out of 5") -- 20%
+	add_level(1, 5, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20%
 	add_level(2, 10, 3, "Too easy !\nGET 2 out of 10") -- 20%
 	add_level(4, 15, 3, "Still here ? Now we \nget real !\nGET 4 out of 15") -- 26%
 	add_level(4, 15, 4, "Watch out, blue ones\nare smaller then others!\nGET 4 out of 15") -- 26% -- complexity
