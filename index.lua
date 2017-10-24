@@ -142,7 +142,7 @@ function draw()
 	Graphics.initBlend()
 	
 	-- background
-	Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, black)
+	--Graphics.fillRect(0, DISPLAY_WIDTH, 0, DISPLAY_HEIGHT, black)
 	Graphics.drawImage(0,0, img_background)
 			
 	-- draw field
@@ -582,8 +582,8 @@ function move_atoms(delta)
 			local atom_size = ATOM[c_atom.id].SIZE
 			
 			-- determ new location
-			local new_x = current_x + dir_x*delta --this should take into account the time passed
-			local new_y = current_y + dir_y*delta --this should take into account the time passed
+			local new_x = math.ceil(current_x + dir_x*delta) --this should take into account the time passed
+			local new_y = math.ceil(current_y + dir_y*delta) --this should take into account the time passed
 			
 			-- check if the atom does not hit the boundry
 			-- if it does switch direction
@@ -593,17 +593,27 @@ function move_atoms(delta)
 				c_atom.dx = -dir_x
 				
 				-- put it back inside the borders
-				new_x = FIELD.WIDTH - (new_x - FIELD.WIDTH)
-				
+				if new_x+atom_size > FIELD.WIDTH then
+					new_x = FIELD.WIDTH - (new_x - FIELD.WIDTH)
+				else
+					-- its going under
+					new_x = 20 + (current_x - new_x)
+				end
 			end
 			
 			if new_y-atom_size < 20 or new_y+atom_size > FIELD.HEIGHT then
 				c_atom.dy = -dir_y
-				new_y = FIELD.HEIGHT - (new_y - FIELD.HEIGHT)
+				
+				if new_y+atom_size > FIELD.HEIGHT then
+					new_y = FIELD.HEIGHT - (new_y - FIELD.HEIGHT)
+				else
+					-- its going under
+					new_y = 20 + (current_y - new_y)
+				end
 			end
 			
-			c_atom.x = new_x
-			c_atom.y = new_y
+			c_atom.x = math.ceil(new_x)
+			c_atom.y = math.ceil(new_y)
 		end
 		i = i + 1
 	end
@@ -759,7 +769,8 @@ end
 
 function load_levels()
 	-- level 1-5
-	add_level(1, 5, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20%
+	add_level(1, 50, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20%
+	add_level(1, 100, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20%
 	add_level(2, 10, 3, "Too easy !\nGET 2 out of 10") -- 20%
 	add_level(4, 15, 3, "Still here ? Now we \nget real !\nGET 4 out of 15") -- 26%
 	add_level(4, 15, 4, "Watch out, blue ones\nare smaller then others!\nGET 4 out of 15") -- 26% -- complexity
