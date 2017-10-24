@@ -589,17 +589,21 @@ function move_atoms(delta)
 			-- if it does switch direction
 			-- 20 = field border + field offset
 			if new_x-atom_size < 20 or new_x+atom_size > FIELD.WIDTH then
-				dir_x = -dir_x
+				-- if the new_x is outside the boundry we should fix that
+				c_atom.dx = -dir_x
+				
+				-- put it back inside the borders
+				new_x = FIELD.WIDTH - (new_x - FIELD.WIDTH)
+				
 			end
 			
 			if new_y-atom_size < 20 or new_y+atom_size > FIELD.HEIGHT then
-				dir_y = -dir_y
+				c_atom.dy = -dir_y
+				new_y = FIELD.HEIGHT - (new_y - FIELD.HEIGHT)
 			end
 			
 			c_atom.x = new_x
 			c_atom.y = new_y
-			c_atom.dx = dir_x
-			c_atom.dy = dir_y
 		end
 		i = i + 1
 	end
