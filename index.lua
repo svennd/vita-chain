@@ -351,18 +351,79 @@ function draw_box(x1, x2, y1, y2, width, color)
 end
 
 function update(delta)	
-	-- chaos
-	move_atoms(delta)
+
+	local i = 0
+	local count_atoms = #atoms
+	while i < count_atoms do
+		local c_atom = atom[i]
+		local c_atom_size = ATOM[c_atom.id].SIZE
+		local c_atom_expand = ATOM[c_atom.id].EXPAND
+		local c_atom_score = ATOM[c_atom.id].SCORE
+		
+		if c_atom.state == STATE.INIT then
+			-- move atom
+			c_atom.x, c_atom.y, c_atom.dx, c_atom.dy = move(c_atom.x, c_atom.y, c_atom.dx, c_atom.dy, c_atom_size, delta)
+			
+			-- check collision with user
+			if user.activated and user.state ~= STATE.MERGED then
+				if distanceSquared(user.x, user.y, atoms[i].x, atoms[i].y) <= (user.size*(user.expand) + atoms[i].neutrons)^2 then
+					-- expand and stop motion
+					c_atom.state = STATE.EXPANDING
+					c_atom.dx = 0
+					c_atom.dy = 0
+				end
+			end
+		elseif c_atom.state == STATE.EXPANDING then
+		
+			-- expand untill explode size
+			if c_atom.expand < c_atom_expand then
+				c_atom.expand = c_atom.expand + (delta*3)
+			else
+				c_atom.state = STATE.EXPLODE
+			end
+			
+		elseif c_atom.state == STATE.EXPLODE then
+		
+			-- implode after an initial stable state
+			if c_atom.implode > animation.implode_start then
+				if c_atom.expand > 1 then
+					c_atom.expand = c_atom.expand - (delta*5)
+				else
+					--remove from field
+					c_atom.state = STATE.MERGED
+					score = score + c_atom_score
+				end
+			else
+				atoms[i].implode = atoms[i].implode + 1
+			end
+		end
+		
+		-- check collisions general
+		if c_atom.state == STATE.EXPANDING or c_atom.state == STATE.EXPLODE then
+			local static_size = c_atom.neutrons*c_atom.expand
+			
+			-- collision detect all others
+			local o = 0
+			while o < count_atoms do
+				-- only collide with floaters
+				if atoms[o].state == STATE.INIT then
+					if distanceSquared(c_atom.x, c_atom.y, atoms[o].x, atoms[o].y) <= (static_size + atoms[o].neutrons)^2 then
+						-- expand and stop motion
+						atoms[o].state = STATE.EXPANDING
+						atoms[o].dx = 0
+						atoms[o].dy = 0		
+					end
+				end
+				o = o + 1
+			end
+		end
+	end
 	
-	-- determ collisions
-	collision_detect()
 	
 	-- expand collisions
 	expand_user(delta)
-	expand_atoms(delta)
 	
 	-- remove items
-	implode_atoms(delta)
 	implode_user(delta)	
 	
 	-- level validation
@@ -435,61 +496,6 @@ function check_level_finished()
 	end
 end
 
--- collision detection
-function collision_detect()
-
-	-- first check user
-	if user.activated and user.state ~= STATE.MERGED then
-		-- user is still active
-		local i = 0
-		local count_atoms = #atoms
-		
-		while i < count_atoms do
-			-- only for floaters
-			if atoms[i].state == STATE.INIT then
-				-- distance should be smaller then user_size*expand + atom.neutrons (atom cannot have expansion but maybe later)
-				if distance(user.x, user.y, atoms[i].x, atoms[i].y) <= (user.size*(user.expand) + atoms[i].neutrons) then
-					-- expand and stop motion
-					atoms[i].state = STATE.EXPANDING
-					atoms[i].dx = 0
-					atoms[i].dy = 0
-				end
-			end
-			i = i + 1
-		end
-	end
-	
-	-- now do all the other atoms this is heavy
-	local i = 0
-	local count_atoms = #atoms
-	
-	while i < count_atoms do
-		-- for expanding or exploding
-		if atoms[i].state == STATE.EXPANDING or atoms[i].state == STATE.EXPLODE then
-			local x_collision = atoms[i].x
-			local y_collision = atoms[i].y
-			local static_size = atoms[i].neutrons*atoms[i].expand
-			
-			-- collision detect all others
-			local o = 0
-			while o < count_atoms do
-				-- only collide with floaters
-				if atoms[o].state == STATE.INIT then
-					if distance(x_collision, y_collision, atoms[o].x, atoms[o].y) <= (static_size + atoms[o].neutrons) then
-						-- expand and stop motion
-						atoms[o].state = STATE.EXPANDING
-						atoms[o].dx = 0
-						atoms[o].dy = 0		
-					end
-				end
-				o = o + 1
-			end
-		end
-		i = i + 1
-	end
-	
-end
-
 -- expand user
 -- need to take dt in this increase
 function expand_user(delta)
@@ -502,50 +508,6 @@ function expand_user(delta)
 				user.state = STATE.EXPLODE
 			end
 		end
-	end
-end
-
--- expand all activated atoms
--- need to take dt in this increase
-function expand_atoms(delta)
-	local i = 0
-	local count_atoms = #atoms
-	
-	while i < count_atoms do
-		local c_atom = atoms[i]
-		-- only for expanding
-		if c_atom.state == STATE.EXPANDING then
-			if c_atom.expand < ATOM[c_atom.id].EXPAND then
-				c_atom.expand = c_atom.expand + (delta*3)
-			else
-				c_atom.state = STATE.EXPLODE
-			end
-		end
-		i = i + 1
-	end
-end
-
--- implode atoms if needed
-function implode_atoms(delta)
-	local i = 0
-	local count_atoms = #atoms
-	
-	while i < count_atoms do
-		-- only for EXPLODED
-		if atoms[i].state == STATE.EXPLODE then
-			if atoms[i].implode > animation.implode_start then
-				if atoms[i].expand > 1 then
-					atoms[i].expand = atoms[i].expand - (delta*5)
-				else
-					--remove from field
-					atoms[i].state = STATE.MERGED
-					score = score + atoms[i].score
-				end
-			else
-				atoms[i].implode = atoms[i].implode + 1
-			end
-		end
-		i = i + 1
 	end
 end
 
@@ -566,57 +528,43 @@ function implode_user(delta)
 	end
 end
 
--- move the atoms around
-function move_atoms(delta)
-	local i = 0
-	local count_atoms = #atoms
-	while i < count_atoms do
-		local c_atom = atoms[i]
-		-- only move when no reaction has happened
-		if c_atom.state == STATE.INIT then
-			-- current location
-			local current_x = c_atom.x
-			local current_y = c_atom.y
-			local dir_x = c_atom.dx
-			local dir_y = c_atom.dy
-			local atom_size = ATOM[c_atom.id].SIZE
-			
-			-- determ new location
-			local new_x = math.ceil(current_x + dir_x*delta) --this should take into account the time passed
-			local new_y = math.ceil(current_y + dir_y*delta) --this should take into account the time passed
-			
-			-- check if the atom does not hit the boundry
-			-- if it does switch direction
-			-- 20 = field border + field offset
-			if new_x-atom_size < 20 or new_x+atom_size > FIELD.WIDTH then
-				-- if the new_x is outside the boundry we should fix that
-				c_atom.dx = -dir_x
-				
-				-- put it back inside the borders
-				if new_x+atom_size > FIELD.WIDTH then
-					new_x = FIELD.WIDTH - (new_x - FIELD.WIDTH)
-				else
-					-- its going under
-					new_x = 20 + (current_x - new_x)
-				end
-			end
-			
-			if new_y-atom_size < 20 or new_y+atom_size > FIELD.HEIGHT then
-				c_atom.dy = -dir_y
-				
-				if new_y+atom_size > FIELD.HEIGHT then
-					new_y = FIELD.HEIGHT - (new_y - FIELD.HEIGHT)
-				else
-					-- its going under
-					new_y = 20 + (current_y - new_y)
-				end
-			end
-			
-			c_atom.x = math.ceil(new_x)
-			c_atom.y = math.ceil(new_y)
+
+-- move atom
+function move(x, y, dx, dy, size, delta)
+	
+	-- new location
+	local new_x = x + dx*delta
+	local new_y = y + dy*delta
+	
+	-- left or right boundry
+	if new_x-size < 20 or new_x+size > FIELD.WIDTH then
+		dx = -dx
+		
+		-- we need to calculate the bounce size instead
+		-- this is temp
+		if new_x+atom_size > FIELD.WIDTH then
+			new_x = FIELD.WIDTH
+		else
+			-- its going under
+			new_x = 20
 		end
-		i = i + 1
 	end
+	
+	-- up or down boundry
+	if new_y-atom_size < 20 or new_y+atom_size > FIELD.HEIGHT then
+		dy = -dy
+		
+		-- this is temp
+		if new_y+atom_size > FIELD.HEIGHT then
+			new_y = FIELD.HEIGHT
+		else
+			-- its going under
+			new_y = 20
+		end
+	end
+	
+	-- return result
+	return new_x, new_y, dx, dy
 end
 
 function game_start()
@@ -678,8 +626,8 @@ function game_start()
 end
 
 -- determ distance between two points
-function distance(x1,y1,x2,y2)
-	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
+function distanceSquared(x1,y1,x2,y2)
+	return ((x2-x1)^2 + (y2-y1)^2)
 end
 
 -- reset game
