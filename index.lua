@@ -3,7 +3,11 @@
 -- application variables
 VERSION = "0.1"
 
-MENU = {MENU = 0, START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
+local MENU = {MENU = 0, START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
+local state = MENU.MENU
+
+-- font
+local fnt_main = Font.load("app0:/assets/xolonium.ttf")
 
 -- temp
 store_writes = ""
@@ -23,20 +27,20 @@ function main()
 	
 	-- try to get out, I dare you.
 	while true do
-		if game.state == MENU.MENU then
+		if state == MENU.MENU then
 			-- loading screen
 			-- menu
-			-- adapts game.state
+			-- adapts state
 			dofile("app0:/menu.lua")
 			
-		elseif game.state == MENU.START then
+		elseif state == MENU.START then
 			dofile("app0:/game.lua")
 		
-		elseif game.state == MENU.HELP then
+		elseif state == MENU.HELP then
 			-- help returns to game.state = 0
 			dofile("app0:/help.lua")
 			
-		elseif game.state == MENU.EXIT then
+		elseif state == MENU.EXIT then
 			-- exit
 			clean_exit()
 		end	
@@ -51,6 +55,8 @@ end
 -- while not strictly necessary, its clean
 function clean_exit()
 	
+	-- font
+	Font.unload(fnt_main)
 	-- kill app
 	System.exit()
 	

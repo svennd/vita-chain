@@ -8,6 +8,9 @@ local MENU = {START = 1, HELP = 2, EXIT = 3, MIN = 1, MAX = 3}
 local img_background = Graphics.loadImage("app0:/assets/bg.png")
 local img_touch = Graphics.loadImage("app0:/assets/touch.png")
 
+-- font
+fnt_main = Font.load("app0:/assets/xolonium.ttf")
+
 -- menu vars
 local oldpad = SCE_CTRL_RTRIGGER -- input init
 local current_menu = 1 -- menu position
@@ -15,8 +18,28 @@ local return_value = false
 local animate_touch = 1
 local animate_touch_direction = 1
 
+
+-- draw a box
+-- untill fillEmptyRect is fixed
+function draw_box(x1, x2, y1, y2, width, color)
+
+	-- top line
+	Graphics.fillRect(x1, x2+width, y1, y1+width, color)
+	
+	-- bot line
+	Graphics.fillRect(x1, x2+width, y2, y2+width, color)
+	
+	-- left line
+	Graphics.fillRect(x1, x1+width, y1, y2, color)
+	
+	-- right line
+	Graphics.fillRect(x2, x2+width, y1, y2, color)
+	
+end
+
+
 -- draw function
-local function menu_draw()
+function menu_draw()
 	-- init
 	Graphics.initBlend()
 	
@@ -24,7 +47,7 @@ local function menu_draw()
 	Graphics.drawImage(0,0, img_background)
 	
 	-- set font size
-	Font.setPixelSizes(main_font, 30)
+	-- Font.setPixelSizes(fnt_main, 30)
 	
 	-- plot menu back
 	Graphics.fillRect(
@@ -42,7 +65,7 @@ local function menu_draw()
 		78,
 		161,
 		Color.new(234,182,143))
-	Font.print(main_font, 645, 99, "START", white)
+	-- Font.print(fnt_main, 645, 99, "START", white)
 		
 	-- help
 	Graphics.fillRect(
@@ -51,7 +74,7 @@ local function menu_draw()
 		182,
 		254,
 		Color.new(234,182,143))
-	Font.print(main_font, 645, 193, "HELP", white)
+	-- Font.print(fnt_main, 645, 193, "HELP", white)
 		
 	-- exit
 	Graphics.fillRect(
@@ -60,7 +83,7 @@ local function menu_draw()
 		273,
 		345,
 		Color.new(234,182,143))
-	Font.print(main_font, 645, 284, "EXIT", white)
+	-- Font.print(fnt_main, 645, 284, "EXIT", white)
 		
 	-- if pad is used for controll draw that
 	if current_menu ~= 0 then
@@ -158,8 +181,11 @@ function menu()
 	Graphics.freeImage(img_background)
 	Graphics.freeImage(img_touch)
 	
+	-- font
+	Font.unload(fnt_main)
+	
 	-- return
-	game.state = return_value
+	state = return_value
 end
 
 menu()

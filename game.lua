@@ -13,7 +13,9 @@ local img_button_1 = Graphics.loadImage("app0:/assets/button_1.png")
 local img_button_2 = Graphics.loadImage("app0:/assets/button_2.png")
 local img_button_3 = Graphics.loadImage("app0:/assets/button_3.png")
 local img_button_4 = Graphics.loadImage("app0:/assets/button_4.png")
-local main_font = Font.load("app0:/assets/xolonium.ttf")
+
+-- font
+local fnt_main = Font.load("app0:/assets/xolonium.ttf")
 
 -- color definitions
 local white 	= Color.new(255, 255, 255)
@@ -76,7 +78,6 @@ local game_score = 0
 local user = {x = 0, y = 0, size = 10, state = STATE_INIT, expand = 1, activated = false, implode = 0}
 local user_max_expand = 3
 
-
 -- animate
 -- local animation = { implode_start = 100, user_implode = 100 }
 local anm_user_implode_delay = 100
@@ -88,37 +89,31 @@ local atom_size = 7
 -- temp
 store_writes = ""
 
--- wrapper to populate level global
-function add_level(lvl_req, lvl_atom, lvl_entropy, lvl_text)
-	table.insert(LEVEL.REQUIREMENT, lvl_req)
-	table.insert(LEVEL.ATOMS, lvl_atom)
-	table.insert(LEVEL.ENTROPY, lvl_entropy)
-	table.insert(LEVEL.TEXT, lvl_text)
-end
 
 -- level state
 function level(n, step)
-	if step == LEVEL.START then
+
+	-- can be more complex
+	local function target_get(n)
+		if (atom_count.merged + atom_count.explode) >= n then
+			return true
+		else
+			return false
+		end
+	end
+	
+	if step == LEVEL.VERIFY then
+		return target_get(LEVEL.REQUIREMENT[n])
+	elseif step == LEVEL.START then
 		-- check to see if we still have levels
 		if LEVEL.ATOMS[n] == nil then
 			-- do subroutine end_game
 			game_over()
 		else
 			-- next level
-			game.level_box = true
+			game_level_box = true
 			populate_atoms(LEVEL.ATOMS[n], LEVEL.ENTROPY[n])
 		end
-	elseif step == LEVEL.VERIFY then
-		return target_get(LEVEL.REQUIREMENT[n])
-	end
-end
-
--- can be more complex
-function target_get(n)
-	if (atom_count.merged + atom_count.explode) >= n then
-		return true
-	else
-		return false
 	end
 end
 
@@ -206,38 +201,38 @@ end
 
 function draw_interface()
 	-- score
-	Font.setPixelSizes(main_font, 22)
-	if game.succes then
-		Font.print(main_font, 806, 511, score, green)
+	Font.setPixelSizes(fnt_main, 22)
+	if game_succes then
+		Font.print(fnt_main, 806, 511, score, green)
 	else
-		Font.print(main_font, 806, 511, score, white)
+		Font.print(fnt_main, 806, 511, score, white)
 	end
 	
 	-- level
-	if game.succes then
-		Font.print(main_font, 50, 511, "LEVEL" .. game.level, green)
+	if game_succes then
+		Font.print(fnt_main, 50, 511, "LEVEL" .. game_level, green)
 	else
-		Font.print(main_font, 50, 511, "LEVEL" .. game.level, white)
+		Font.print(fnt_main, 50, 511, "LEVEL" .. game_level, white)
 	end
 	
 	-- atom count
-	if game.succes then
-		Font.print(main_font, 300, 511, (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", green)
+	if game_succes then
+		Font.print(fnt_main, 300, 511, (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game_level] .. ")", green)
 	else
-		Font.print(main_font, 300, 511, (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game.level] .. ")", white)
+		Font.print(fnt_main, 300, 511, (atom_count.merged+atom_count.explode) .. "/" .. atom_count.total .. " (" .. LEVEL.REQUIREMENT[game_level] .. ")", white)
 	end
 end
 
 -- draw infoscreen
 function draw_info()
 	-- poor kid
-	if game.loser then	
+	if game_loser then	
 		-- red background
 		Graphics.fillRect(289, 620, 100, 400, Color.new(255, 0, 0, 200))
 		
 		-- GAME OVER
-		Font.setPixelSizes(main_font, 36)
-		Font.print(main_font, 335, 110, "GAME OVER", black)
+		Font.setPixelSizes(fnt_main, 36)
+		Font.print(fnt_main, 335, 110, "GAME OVER", black)
 		
 		-- divider
 		Graphics.fillRect(310, 600, 160, 165, black)
@@ -245,58 +240,58 @@ function draw_info()
 		-- RETRY LEVEL
 		-- background
 		Graphics.fillRect(310, 600, 190, 260, black)
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 340, 205, "RETRY LEVEL", white)
+		Font.setPixelSizes(fnt_main, 26)
+		Font.print(fnt_main, 340, 205, "RETRY LEVEL", white)
 		
 		-- TO MENNU
 		-- background
 		Graphics.fillRect(310, 600, 300, 370, black)
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 390, 320, "GIVE UP", white)
+		Font.setPixelSizes(fnt_main, 26)
+		Font.print(fnt_main, 390, 320, "GIVE UP", white)
 	end
 	
 	-- game finished
-	if game.finish then
+	if game_finish then
 		-- draw level box (green)
 		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
 		
 		-- 
-		Font.setPixelSizes(main_font, 36)
-		Font.print(main_font, 335, 110, "GAME OVER", black)
+		Font.setPixelSizes(fnt_main, 36)
+		Font.print(fnt_main, 335, 110, "GAME OVER", black)
 		
 		-- divider
 		Graphics.fillRect(310, 600, 160, 165, black)
 		
 		-- level text
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 320, 190, "You won !\nWe now start over.", white)
+		Font.setPixelSizes(fnt_main, 26)
+		Font.print(fnt_main, 320, 190, "You won !\nWe now start over.", white)
 		
 		-- ok button
 		Graphics.fillRect(310, 600, 300, 370, black)
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 430, 320, "OK", white)
+		Font.setPixelSizes(fnt_main, 26)
+		Font.print(fnt_main, 430, 320, "OK", white)
 		
 	end
 	
-	if game.level_box then
+	if game_level_box then
 		-- draw level box (green)
 		Graphics.fillRect(289, 620, 100, 400, Color.new(0, 255, 0, 200))
 		
 		-- 
-		Font.setPixelSizes(main_font, 36)
-		Font.print(main_font, 335, 110, "LEVEL " .. game.level, black)
+		Font.setPixelSizes(fnt_main, 36)
+		Font.print(fnt_main, 335, 110, "LEVEL " .. game_level, black)
 		
 		-- divider
 		Graphics.fillRect(310, 600, 160, 165, black)
 		
 		-- level text
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 320, 190, LEVEL.TEXT[game.level], white)
+		Font.setPixelSizes(fnt_main, 26)
+		Font.print(fnt_main, 320, 190, LEVEL.TEXT[game_level], white)
 		
 		-- ok button
 		Graphics.fillRect(310, 600, 300, 370, black)
-		Font.setPixelSizes(main_font, 26)
-		Font.print(main_font, 430, 320, "OK", white)
+		Font.setPixelSizes(fnt_main, 26)
+		Font.print(fnt_main, 430, 320, "OK", white)
 		
 	end
 end
@@ -346,7 +341,7 @@ end
 function draw_field()
 	
 	-- bg
-	if game.succes then
+	if game_succes then
 		Graphics.fillRect(10, field_width, 10, field_height, Color.new(0, 150, 0, 10))
 	else
 		Graphics.fillRect(10, field_width, 10, field_height, Color.new(0, 0, 0, 10))
@@ -389,13 +384,18 @@ end
 
 function update(delta)	
 
+	-- set some iterable functions
+	local gettime = Timer.getTime
+	
 	-- determ distance between two points
 	local function distanceSquared(x1,y1,x2,y2)
 		return ((x2-x1)^2 + (y2-y1)^2)
 	end
 	
 	-- stuff
-	local t = Timer.getTime(game_time)
+	local t = gettime(game_time)
+	local ts = 0
+	local tst = 0
 	local move = 0
 	local movei = 0
 	local sexpand = 0
@@ -403,41 +403,64 @@ function update(delta)
 	local simplode = 0
 	local simplodei = 0
 	local i = 0
+	local cnt_init = 0
+	local cnt_expand = 0 
+	local cnt_explode = 0
+	local cnt_merged = 0
 	local count_atoms = #atoms
+	
 	while i < count_atoms do
 		local c_atom = atoms[i]
-		local c_atom_size = ATOM[c_atom.id].SIZE
+		local c_atom_size = atom_size
 		local c_atom_expand = ATOM[c_atom.id].EXPAND
 		local c_atom_score = ATOM[c_atom.id].SCORE
 		
 		if c_atom.state == STATE_INIT then
+			
+			ts = gettime(game_time)
+			
 			-- move atom
-			c_atom.x, c_atom.y, c_atom.dx, c_atom.dy = move(c_atom.x, c_atom.y, c_atom.dx, c_atom.dy, c_atom_size, delta)
+			c_atom.x, c_atom.y, c_atom.dx, c_atom.dy = move(c_atom.x, c_atom.y, c_atom.dx, c_atom.dy, atom_size, delta)
+			
 			-- check collision with user
 			if user.activated and user.state ~= STATE_MERGED then
-				if distanceSquared(user.x, user.y, atoms[i].x, atoms[i].y) <= (user.size*(user.expand) + atoms[i].neutrons)^2 then
+				if distanceSquared(user.x, user.y, c_atom.x, c_atom.y) <= (user.size*(user.expand) + atom_size)^2 then
 					-- expand and stop motion
 					c_atom.state = STATE_EXPAND
 					c_atom.dx = 0
 					c_atom.dy = 0
 				end
 			end
-			local x = Timer.getTime(game_time)
-			move = move + (t - x)
-			movei = movei + 1
+			
+			-- keep_score
+			cnt_init = cnt_init + 1
+			
+			-- debug
+			move = move + (gettime(game_time) - ts)
+			-- movei = movei + 1
+			
 		elseif c_atom.state == STATE_EXPAND then
 		
+			ts = gettime(game_time)
+			
 			-- expand untill explode size
 			if c_atom.expand < c_atom_expand then
 				c_atom.expand = c_atom.expand + (delta*3)
 			else
 				c_atom.state = STATE_EXPLODE
 			end
-			local y = Timer.getTime(game_time)
-			sexpand = sexpand + (t - y)
-			sexpandi = sexpandi + 1
+			
+			-- keep_score
+			cnt_expand = cnt_expand + 1
+			
+			-- debug
+			sexpand = sexpand + (gettime(game_time) - ts)
+			-- sexpandi = sexpandi + 1
+			
 		elseif c_atom.state == STATE_EXPLODE then
 		
+			ts = gettime(game_time)
+			
 			-- implode after an initial stable state
 			if c_atom.implode > animation.anm_implode_delay then
 				if c_atom.expand > 1 then
@@ -450,23 +473,30 @@ function update(delta)
 			else
 				atoms[i].implode = atoms[i].implode + 1
 			end
-			local y = Timer.getTime(game_time)
-			simplode = simplode + (t - y)
-			simplodei = simplodei + 1
+			
+			cnt_explode = cnt_explode + 1
+			
+			simplode = simplode + (gettime(game_time) - ts)
+			
+		-- state MERGED
+		else
+			cnt_merged = cnt_merged + 1
 		end
-		
+
 		-- check collisions general
 		if c_atom.state == STATE_EXPAND or c_atom.state == STATE_EXPLODE then
 			
-			local d = Timer.getTime(game_time)
-			local static_size = c_atom.neutrons*c_atom.expand
+			ts = gettime(game_time)
+			
+			-- static distance
+			local static_size = (atom_size*c_atom.expand + atom_size) ^ 2
 			
 			-- collision detect all others
 			local o = 0
 			while o < count_atoms do
 				-- only collide with floaters
 				if atoms[o].state == STATE_INIT then
-					if distanceSquared(c_atom.x, c_atom.y, atoms[o].x, atoms[o].y) <= (static_size + atoms[o].neutrons)^2 then
+					if distanceSquared(c_atom.x, c_atom.y, atoms[o].x, atoms[o].y) <= static_size then
 						-- expand and stop motion
 						atoms[o].state = STATE_EXPAND
 						atoms[o].dx = 0
@@ -475,48 +505,16 @@ function update(delta)
 				end
 				o = o + 1
 			end
-			local d1 = Timer.getTime(game_time)
-			dmsg("col:" .. (d1-d) .."|")
+			
+			
+			col = col + (gettime(game_time) - ts)
+			
+			-- dmsg("col:" .. (d1-d) .."|")
 		end
 		i = i + 1
 	end
-	local t1 = Timer.getTime(game_time)
-
-	dmsg("m:" .. (move/movei) .."*e" .. (sexpand/sexpandi) .."*i" .. (simplode/simplodei) .. "|")
-	dmsg("up:" .. (t1-t) .."|")
-	
-	-- expand collisions
-	expand_user(delta)
-	
-	-- remove items
-	implode_user(delta)	
-	
-	-- level validation
-	keep_score()
-	check_level_finished()
-end
-
-function keep_score()
-	local i = 0
-	local count_atoms = #atoms
-	local init = 0
-	local expanding = 0 
-	local explode = 0
-	local merged = 0
-
-	while i < count_atoms do
-		if atoms[i].state == STATE_INIT then
-			init = init + 1
-		elseif atoms[i].state == STATE_EXPAND then
-			expanding = expanding + 1
-		elseif atoms[i].state == STATE_EXPLODE then
-			explode = explode + 1
-		elseif atoms[i].state == STATE_MERGED then
-			merged = merged + 1
-		end
-		i = i + 1
-	end
-	
+			
+	-- set globals
 	-- dont know why this would change but anyway
 	cnt_atom_total = count_atoms
 	
@@ -526,34 +524,46 @@ function keep_score()
 	cnt_atom_explode = explode
 	cnt_atom_merged = merged
 	
+	-- write debug
+	dmsg("m:" .. (move) .."*e" .. (sexpand) .."*i" .. (simplode) .. "|")
+	dmsg("up:" .. (gettime(game_time) - t) .."|")
+	
+	-- expand collisions
+	expand_user(delta)
+	
+	-- remove items
+	implode_user(delta)	
+	
+	-- level validation
+	check_level_finished()
 end
 
 function check_level_finished()
 	
 	-- user not yet shot then we cant be finished yet
 	-- or user is already lost
-	if not user.activated or game.loser then
+	if not user.activated or game_loser then
 		return false
 	end
 	
 	-- if succesfull finished level up!
-	if level(game.level, LEVEL.VERIFY) then
+	if level(game_level, LEVEL.VERIFY) then
 		-- oke next level nothing going on anymore
 		-- delay win for slowing down game after last animation
-		if user.state == STATE_MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and game.delay_win > 100 then
-			reset_game(game.level + 1)
-			level(game.level, LEVEL.START)
+		if user.state == STATE_MERGED and atom_count.expanding == 0 and atom_count.explode == 0 and game_delay_win > 100 then
+			reset_game(game_level + 1)
+			level(game_level, LEVEL.START)
 		else
 			-- succes 
-			game.succes = true
-			game.delay_win = game.delay_win + 1
+			game_succes = true
+			game_delay_win = game_delay_win + 1
 		end
 	else
 		-- in case of failed
 			-- user has been shot
 			-- no expanding no exploding (merged or init left)
 		if user.state == STATE_MERGED and atom_count.expanding == 0 and atom_count.explode == 0 then
-			game.loser = true
+			game_loser = true
 		end
 		
 		-- in any other case it is still going
@@ -633,60 +643,7 @@ end
 
 function game_start()
 	
-	local timestep = 1000/60 -- 60 fps target
-	local delta = 0
-	local start = Timer.new()
-	local last_frame = 0
-	-- local fps_second = 0
-	-- local fps_update = 0
-	
-	-- set first level
-	level(game.level, LEVEL.START)
-	
-	-- loop
-	while true do
-		now = Timer.getTime(start)
-		
-		-- determ fps as exponential moving avg fps
-		-- if now > fps_update + 1000 then
-			-- game.fps = math.floor(0.25 * fps_second + (1-0.25) * game.fps) -- calculate fps
-			-- fps_update = now
-			-- fps_second = 0
-		-- end
-		
-		delta = delta + (now - last_frame)
-		last_frame = now			
-		
-		-- update game procs
-		local update_step = 0
-		while delta >= timestep do
-			user_input()
-			
-			-- do update(delta)
-			-- movement : pos = velocity * delta
-			update(delta/1000)
-			delta = delta - timestep
-			
-			-- escape spiral of death, should not occur
-			update_step = update_step + 1
-			if update_step > 250 then
-				-- cannot update fast enough
-				-- perhaps store this as an error
-				delta = 1
-				break
-			end
-		end
-		
-		-- draw game
-		draw()
-		-- fps_second = fps_second + 1
-		
-		-- if we need to go to menu
-		if game_break_loop then
-			game_break_loop = false
-			break
-		end
-	end
+
 end
 
 -- reset game
@@ -694,17 +651,17 @@ function reset_game(level)
 	atoms = {}
 	atom_count = {total = 0, init = 0, expanding = 0, explode = 0, merged = 0}
 	user = {x = 0, y = 0, size = 10, state = STATE_INIT, expand = 1, activated = false, implode = 0}
-	game.level = level
-	game.loser = false
-	game.succes = false
-	game.delay_win = 0 -- should be 0 
+	game_level = level
+	game_loser = false
+	game_succes = false
+	game_delay_win = 0 -- should be 0 
 end
 
 
 -- game finished
 function game_over()
-	game.finish = true
-	game.level = 1
+	game_finish = true
+	game_level = 1
 end
 
 -- read user_input
@@ -718,7 +675,7 @@ function user_input()
 	if dt > 100 and x ~= nil then
 	
 		-- ingame
-		if not user.activated and not game.level_box then
+		if not user.activated and not game_level_box then
 			-- within field
 			if x < field_width and y < field_height then
 				user.x = x
@@ -729,39 +686,39 @@ function user_input()
 		end
 		
 		-- level box is active
-		if game.level_box then
+		if game_level_box then
 			if x > 310 and x < 600 then
 				if y > 300 and y < 370 then
-					game.level_box = false
+					game_level_box = false
 					game_lst_input = now
 				end
 			end
 		end
 		
 		--lost
-		if game.loser then
+		if game_loser then
 			if x > 310 and  x < 600 then
 				if y > 190 and y < 260 then
 					-- retry level
-					reset_game(game.level)
-					level(game.level, LEVEL.START)
-					game.last_input = now
+					reset_game(game_level)
+					level(game_level, LEVEL.START)
+					game_lst_input = now
 				elseif y > 300 and y < 370 then
 					-- back to menu
 					reset_game(1)
 					game_break_loop = true
-					game.state = MENU.MENU
+					game_state = MENU.MENU
 				end
 			end
 		end
 		
-		if game.finish then
+		if game_finish then
 			if x > 310 and  x < 600 then
 				if y > 300 and y < 370 then
 					-- back to menu
-					reset_game(game.level)
-					level(game.level, LEVEL.START)
-					game.finish = false
+					reset_game(game_level)
+					level(game_level, LEVEL.START)
+					game_finish = false
 				end
 			end
 		end
@@ -807,31 +764,68 @@ function load_levels()
 	-- add_level(48, 55, 6) -- 87%
 end
 
+
+-- wrapper to populate level global
+function add_level(lvl_req, lvl_atom, lvl_entropy, lvl_text)
+	table.insert(LEVEL.REQUIREMENT, lvl_req)
+	table.insert(LEVEL.ATOMS, lvl_atom)
+	table.insert(LEVEL.ENTROPY, lvl_entropy)
+	table.insert(LEVEL.TEXT, lvl_text)
+end
+
 -- main function
 function main()
 	-- during loading screen
 	load_levels()
 	
 	-- try to get out, I dare you.
+	local timestep = 1000/60 -- 60 fps target
+	local delta = 0
+	local start = Timer.new()
+	local last_frame = 0
+
+	-- set first level
+	level(game_level, LEVEL.START)
+	
+	-- set some iterable functions
+	local gettime = Timer.getTime
+	
+	-- loop
 	while true do
-		if game.state == MENU.MENU then
-			-- loading screen
-			-- menu
-			-- adapts game.state
-			dofile("app0:/menu.lua")
-			
-		elseif game.state == MENU.START then
-			-- game start
-			game_start()
+		now = gettime(start)
 		
-		elseif game.state == MENU.HELP then
-			-- help returns to game.state = 0
-			dofile("app0:/help.lua")
+		delta = delta + (now - last_frame)
+		last_frame = now			
+		
+		-- update game procs
+		local update_step = 0
+		while delta >= timestep do
+			user_input()
 			
-		elseif game.state == MENU.EXIT then
-			-- exit
-			clean_exit()
-		end	
+			-- do update(delta)
+			-- movement : pos = velocity * delta
+			update(delta/1000)
+			delta = delta - timestep
+			
+			-- escape spiral of death, should not occur
+			update_step = update_step + 1
+			if update_step > 250 then
+				-- cannot update fast enough
+				-- perhaps store this as an error
+				delta = 1
+				break
+			end
+		end
+		
+		-- draw game
+		draw()
+		-- fps_second = fps_second + 1
+		
+		-- if we need to go to menu
+		if game_break_loop then
+			game_break_loop = false
+			break
+		end
 	end
 	
 	-- end of execution
@@ -910,13 +904,19 @@ function clean_exit()
 	Graphics.freeImage(img_button_3)
 	Graphics.freeImage(img_button_4)
 	
+	-- font
+	Font.unload(fnt_main)
+	
 	-- close music files
 	-- Sound.close(snd_background)
 	
 	-- kill app
-	System.exit()
+	-- System.exit()
 	
 end
 
 -- run the code
 main()
+
+-- return to menu
+state = MENU.MENU 

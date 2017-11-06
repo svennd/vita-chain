@@ -5,6 +5,9 @@ local img_background = Graphics.loadImage("app0:/assets/bg.png")
 local img_touch = Graphics.loadImage("app0:/assets/touch.png")
 local img_help = Graphics.loadImage("app0:/assets/help_mechanism.png")
 
+-- font
+local fnt_main = Font.load("app0:/assets/xolonium.ttf")
+
 -- menu vars
 local oldpad = SCE_CTRL_RTRIGGER -- input init
 local return_value = false
@@ -31,40 +34,40 @@ local function help_draw()
 		Color.new(229,144,134,235)) -- little bit alpha
 
 	-- set font size
-	Font.setPixelSizes(main_font, 25)
+	Font.setPixelSizes(fnt_main, 25)
 	
 	if screen.current == 1 then
 		-- text
-		Font.print(main_font, 140, 60, "This game uses the front touch screen of the vita.", white)
+		Font.print(fnt_main, 140, 60, "This game uses the front touch screen of the vita.", white)
 			
 	elseif screen.current == 2 then
-		Font.print(main_font, 140, 60, "The target of the game is to create a chain reaction.", white)
+		Font.print(fnt_main, 140, 60, "The target of the game is to create a chain reaction.", white)
 		
 		-- mechanism
 		Graphics.drawImage(140, 100, img_help)
 		
 	elseif screen.current == 3 then
-		Font.print(main_font, 140, 60, "Different atoms have different effects.", white)
+		Font.print(fnt_main, 140, 60, "Different atoms have different effects.", white)
 		
 		
-		Font.setPixelSizes(main_font, 20)
+		Font.setPixelSizes(fnt_main, 20)
 		Graphics.fillCircle(140, 100, 7, yellow)
-		Font.print(main_font,160, 85, "size : 5     score : 10", white)
+		Font.print(fnt_main,160, 85, "size : 5     score : 10", white)
 		
 		Graphics.fillCircle(140, 120, 7, red)
-		Font.print(main_font, 160, 105, "size : 4     score : 15", white)
+		Font.print(fnt_main, 160, 105, "size : 4     score : 15", white)
 		
 		Graphics.fillCircle(140, 140, 7, green)
-		Font.print(main_font, 160, 125, "size : 3.5  score : 25", white)
+		Font.print(fnt_main, 160, 125, "size : 3.5  score : 25", white)
 		
 		Graphics.fillCircle(140, 160, 7, blue)
-		Font.print(main_font, 160, 145, "size : 2     score : 35", white)
+		Font.print(fnt_main, 160, 145, "size : 2     score : 35", white)
 		
 		Graphics.fillCircle(140, 180, 7, purple)
-		Font.print(main_font, 160, 165, "size : 1.7  score : 50", white)
+		Font.print(fnt_main, 160, 165, "size : 1.7  score : 50", white)
 		
 		Graphics.fillCircle(140, 200, 7, orange)
-		Font.print(main_font, 160, 185, "size : 1.5   score : 70", white)
+		Font.print(fnt_main, 160, 185, "size : 1.5   score : 70", white)
 		
 	end
 	
@@ -130,9 +133,10 @@ function help()
 	Graphics.freeImage(img_help)
 	Graphics.freeImage(img_touch)
 	Graphics.freeImage(img_background)
+	Font.unload(fnt_main)
 	
 	-- return
-	game.state = return_value
+	state = return_value
 end
 
 help()
