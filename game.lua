@@ -734,7 +734,7 @@ end
 function load_levels()
 	-- level 1-5
 	add_level(1, 50, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20%
-	add_level(1, 100, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20%
+	add_level(1, 100, 3, "Get your first \nexplosion going !\nGET 1 out of 5") -- 20% --??? been awhile since i used lua or even worked on it so...
 	add_level(2, 10, 3, "Too easy !\nGET 2 out of 10") -- 20%
 	add_level(4, 15, 3, "Still here ? Now we \nget real !\nGET 4 out of 15") -- 26%
 	add_level(4, 15, 4, "Watch out, blue ones\nare smaller then others!\nGET 4 out of 15") -- 26% -- complexity
@@ -751,9 +751,16 @@ function load_levels()
 	add_level(20, 35, 4, "gota catch\n'm all?\nGET20 out of 30") -- 57%
 	add_level(26, 40, 4, "this is crazy\nGET26 out of 40") -- 65%
 	add_level(26, 40, 5, "ready for the\nsecret msg?\nGET26 out of 40") -- 65%
-	add_level(22, 40, 6, "the message is\nGET26out of 40") -- 65%
+	add_level(26, 40, 6, "the message is\nGET26out of 40") -- 65% --fixed
 	add_level(35, 40, 6, "impossible is\njust an opinion\nGET 35 out of 40")
 	
+	-- eixs levels cuz the game is too short
+	add_level(40, 50, 4, "New stuffs!\nGET40 out of 50") -- 80%
+	add_level(50, 50, 6, "Eix says\nHave fun losing!\nGET50 out of 50") -- 100%
+	add_level(10, 40, 3, "Wow\nhave an easy level\nGET10 out of 40") -- 25%?
+	add_level(10, 10, 8, "Almost at the end!\nnext level is impossible\nGET10 out of 10") -- 100%
+	add_level(60, 50, 10, "Megumin will be proud\nbut you cant win this level\nGET60 out of 50") -- 110% -- final level, my weeb rubbed off o it a little
+
 	-- after this perfomance is laggy
 	-- add_level(30, 45, 6) -- 66%
 	-- add_level(38, 50, 5) -- 76%
