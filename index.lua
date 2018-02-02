@@ -1,12 +1,12 @@
 -- chain for vita, by svennd, and slightly modded by Eix :)
--- version 0.1
+-- version 0.2
 
 -- vita constants
 DISPLAY_WIDTH = 960
 DISPLAY_HEIGHT = 544
 
 -- application variables
-VERSION = "0.1"
+VERSION = "0.2"
 
 -- game constants
 FIELD = {WIDTH = 700, HEIGHT = 400}
@@ -59,7 +59,7 @@ ATOM = {
          {NAME = "NEON", SIZE = 4, COLOR = dark_green, EXPAND = 1.8, FX = SFX.GREEN_TO_BLUE, SCORE = 90},
          {NAME = "SILVER", SIZE = 3.5, COLOR = silver, EXPAND = 1.5, FX = SFX.RED_TO_YELLOW, SCORE = 120},
          {NAME = "RADON", SIZE = 3, COLOR = deep, EXPAND = 1, FX = SFX.PURPLE_TO_ORANGE, SCORE = 150},
-         {NAME = "NUKE", SIZE = 1, COLOR = nuke, EXPAND = 100, FX = SFX.YELLOW_TO_RED, SCORE = 200}
+         {NAME = "NUKE", SIZE = 2.5, COLOR = nuke, EXPAND = 100, FX = SFX.YELLOW_TO_RED, SCORE = 200}
       }
 game = {play = Timer.new(), last_input = 0, state = 0, fps = 60, step = 10, level = 1, level_box = false, loser = false, succes = false, delay_win = 0, finish = false}
 user = {x = 0, y = 0, size = 10, state = STATE.INIT, expand = 1, activated = false, implode = 0}
@@ -419,7 +419,7 @@ function check_level_finished()
    if not user.activated or game.loser then
       return false
    end
-   if atom_count.total <= atom_count.merged then
+   if atom_count.total <= atom_count.merged then -- if a death spiral happens and crashes game this makes it goto the next level instead of crashing
       reset_game(game.level + 1)
       level(game.level, LEVEL.START)
    end
