@@ -3,6 +3,8 @@ Creating a chain reaction. It's never been so fun! This is my first touchy-the-f
 
 <img src='https://github.com/svennd/vita-chain/blob/master/chain_v0.1.png' />
 
+note: Project has been abandoned, from 50+ dots, we can't maintain the fps, I don't know why, so there is not really a point. 
+
 # features
 * touchy the fishy ?
 * levels
